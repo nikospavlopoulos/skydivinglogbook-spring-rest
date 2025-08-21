@@ -55,7 +55,7 @@ dependencies {
 
     // === Security & Authentication ===
     // Provides authentication/authorization framework (filters, config, BCrypt, etc).
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // === Validation ===
     // Bean validation with Jakarta Validation (annotations like @NotNull, @Email, etc).
@@ -66,14 +66,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
     // === Databases (H2 + MySQL) ===
+    implementation 'com.h2database:h2'
     runtimeOnly 'com.h2database:h2'  // In-memory database for dev/testing.
     runtimeOnly 'com.mysql:mysql-connector-j'  // MySQL driver for production database.
 
     // === Testing (JUnit, Spring Boot Test, Security Test) ===
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'  // Brings JUnit 5, Mockito, Spring test utilities.
-    testImplementation 'org.springframework.security:spring-security-test'  // Security-specific test helpers (mock authentication, test filters).
+//    testImplementation 'org.springframework.security:spring-security-test'  // Security-specific test helpers (mock authentication, test filters).
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'  // Ensures test discovery and execution with JUnit 5 platform.
 
     // === API Documentation (OpenAPI/Swagger UI) ===
