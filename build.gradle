@@ -76,13 +76,17 @@ dependencies {
 
     // === Testing (JUnit, Spring Boot Test, Security Test) ===
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'  // Brings JUnit 5, Mockito, Spring test utilities.
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Brings JUnit 5, Mockito, Spring test utilities.
 //    testImplementation 'org.springframework.security:spring-security-test'  // Security-specific test helpers (mock authentication, test filters).
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'  // Ensures test discovery and execution with JUnit 5 platform.
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Ensures test discovery and execution with JUnit 5 platform.
 
     // === API Documentation (OpenAPI/Swagger UI) ===
     // Generates Swagger/OpenAPI docs and provides a UI at /swagger-ui.html.
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
 
     // === JWT Authentication ===
     // JJWT: library for creating and parsing JWT tokens, integrates with Jackson for JSON.
