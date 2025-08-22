@@ -8,17 +8,12 @@
 - [ ] Write unit tests for entity validation.
 
 #### Classes:
-- [ ] AbstractEntity – lifecycle hooks, tests, validations
+- [x] AbstractEntity – lifecycle hooks, tests, validations
     - **TDD - Unit Tests First**: Write unit tests verifying lifecycle hooks populate values correctly.
-    - Implement a mapped superclass with shared fields (`id`, `uuid`, `createdAt`, `updatedAt`).
-    - Add lifecycle hooks (`@PrePersist`, `@PreUpdate`).
+    - Implement a mapped superclass with shared fields (`createdAt`, `updatedAt`).
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Auto-generate id and uuid correctly on persist. createdAt populated on insert. updatedAt changes on update.
-        - Negative: Attempt to persist entity without required fields → validation error. Manually set createdAt/updatedAt ignored.
-        - Positive: ID auto-increment works, UUID generated uniquely per entity.
-        - Positive: `equals` and `hashCode` behave consistently (compare persisted vs transient entity).
-        - Negative: Setting `null` values for annotated non-null fields → JPA validation fails.
-        - Negative: Updating entity without modifying fields → `updatedAt` should remain unchanged.		
+		-  Test when new instance is created and the timestamps are null. Both createdAt and updatedAt are set, and createdAt equals updatedAt
+		- Test when instance is updated, only updatedAt is changed, and the createdAt remains unchanged
 
 - [ ] Jump – fields, relationships, validations, tests
     - **TDD - Unit Tests First**: Write entity-level tests validating relationship mapping and constraints.
@@ -50,26 +45,29 @@
         - Negative: Altitude zero or negative → `ConstraintViolationException`.
         - Negative: Missing relation (no user assigned) → persistence error.
         
-- [ ] Aircraft – static data, persistence, tests
+- [x] Aircraft – static data, persistence, tests
     - **TDD - Unit Tests First**: Test saving and retrieving aircraft entities.
     - Define attributes (model.).
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Valid aircraft model persists. Retrieve by ID works.
-        - Negative: Duplicate name/model → exception. Null name → validation failure.
+        - create (database persists) successfully. Retrieve by ID works.
+        - Name is not null - Validation failure
+        - Name must be unique (duplicate throws exception)
         
-- [ ] Dropzone – attributes, relationships, tests
+- [x] Dropzone – attributes, relationships, tests
     - **TDD - Unit Tests First**: Test persistence and retrieval, plus relationships with `Jump`.
     - Define attributes (name, location).
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Persist and retrieve dropzone with valid name/location. Relation with Jump works.
-        - Negative: Null name or location → validation error. Attempt to delete when jumps exist → constraint violation.
+        - create (database persists) successfully. Retrieve by ID works.
+        - Name is not null - Validation failure
+        - Name must be unique (duplicate throws exception)
 
-- [ ] Jumptype – static data, persistence, tests
+- [x] Jumptype – static data, persistence, tests
     - Define attributes (type name, description).
     - **TDD - Unit Tests First**: Test persistence and mapping.
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Valid type name persists. Multiple jump types co-exist.
-        - Negative: Duplicate type name → exception. Null/blank type name → validation error.
+        - create (database persists) successfully. Retrieve by ID works.
+        - Name is not null - Validation failure
+        - Name must be unique (duplicate throws exception)
 
 ---
 
@@ -98,42 +96,25 @@
     - Extend `JpaRepository<Jump, Long>`.
     - Add query methods (e.g., `findByUserId`, `findByDropzone`).
     - Test Ideas - Positive/Negative Scenarios:
+
         
-        - Positive: findByUserId returns correct jumps. findByDropzone returns expected results.
-        - Negative: Query by non-existing user/dropzone returns empty..
-        
-        - Positive: Query by `userId` returns only jumps for that user.
-        - Positive: Query by `dropzone` returns expected results.
-        - Negative: Query with invalid `userId` returns empty list.
-        - Negative: Attempt to delete non-existent ID → no-op or exception depending on config.
-        
-- [ ] AircraftRepository – queries, tests
+- [x] AircraftRepository – queries, tests
     - **TDD - Unit Tests First**: Write repository tests for aircraft lookups.
     - Extend `JpaRepository<Aircraft, Long>`.
-    - Add query methods (e.g., `findByModel`).
     - Test Ideas - Positive/Negative Scenarios:
+
         
-        - Positive: Save and retrieve aircraft. Query by model returns correct entity.
-        - Negative: Query non-existent model returns empty.
-        
-        - Positive: Query returns entity when model exists.
-        - Negative: Save duplicate model → violates unique constraint.
-        
-- [ ] DropzoneRepository – queries, tests
+- [x] DropzoneRepository – queries, tests
     - **TDD - Unit Tests First**: Test persistence and retrieval of dropzones.
     - Extend `JpaRepository<Dropzone, Long>`.
-    - Add query methods (e.g., `findByLocation`).
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Save and retrieve dropzone. Query by location returns correct set.
-        - Negative: Query with unknown location → empty list.
+
         
-- [ ] JumptypeRepository – queries, tests
+- [x] JumptypeRepository – queries, tests
     - **TDD - Unit Tests First**: Test retrieval and persistence of jump types.
     - Extend `JpaRepository<Jumptype, Long>`.
-    - Add query methods
     - Test Ideas - Positive/Negative Scenarios:
-        - Positive: Save and retrieve jump type. Query returns all jump types.
-        - Negative: Saving duplicate jump type fails.
+
 
 ---
 
