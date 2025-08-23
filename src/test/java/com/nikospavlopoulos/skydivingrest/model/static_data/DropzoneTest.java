@@ -52,7 +52,7 @@ class DropzoneTest {
         Dropzone dropzone1 = new Dropzone();
         dropzone1.setDropzoneName("Zone1");
 
-//        Dropzone savedDropzone = dropzoneRepository.saveAndFlush(dropzone1);
+        Dropzone savedDropzone = dropzoneRepository.saveAndFlush(dropzone1);
 
         Dropzone dropzone2 = new Dropzone();
         dropzone2.setDropzoneName("Zone1");

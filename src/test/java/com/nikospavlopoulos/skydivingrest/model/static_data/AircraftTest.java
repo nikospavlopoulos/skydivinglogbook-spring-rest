@@ -53,7 +53,7 @@ class AircraftTest {
         Aircraft aircraft1 = new Aircraft();
         aircraft1.setAircraftName("Plane1");
 
-//        Aircraft savedAircraft = aircraftRepository.saveAndFlush(aircraft1);
+        Aircraft savedAircraft = aircraftRepository.saveAndFlush(aircraft1);
 
         Aircraft aircraft2 = new Aircraft();
         aircraft2.setAircraftName("Plane1");

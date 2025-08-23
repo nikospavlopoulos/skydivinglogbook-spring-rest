@@ -53,7 +53,7 @@ class JumptypeTest {
         Jumptype jumptype1 = new Jumptype();
         jumptype1.setJumptypeName("Zone1");
 
-//        Jumptype savedJumptype = jumptypeRepository.saveAndFlush(jumptype1);
+        Jumptype savedJumptype = jumptypeRepository.saveAndFlush(jumptype1);
 
         Jumptype jumptype2 = new Jumptype();
         jumptype2.setJumptypeName("Zone1");

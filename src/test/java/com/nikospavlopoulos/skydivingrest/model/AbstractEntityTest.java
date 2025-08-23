@@ -52,7 +52,7 @@ class AbstractEntityTest {
         LocalDateTime updatedAtInitial = savedEntity.getUpdatedAt();
 
         // Wait two seconds for update
-        Thread.sleep(2000);
+        Thread.sleep(500);
         testEntity.setName("updatedName");
 
         TestOnlyEntityTest updatedEntity = testOnlyRepositoryTest.saveAndFlush(testEntity);
