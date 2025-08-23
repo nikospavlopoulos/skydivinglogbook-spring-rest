@@ -68,4 +68,7 @@ public class Jump extends AbstractEntity {
     @JoinColumn(name = "jumptype_id", nullable = false)
     private Jumptype jumptype;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

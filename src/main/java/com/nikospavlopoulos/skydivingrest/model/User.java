@@ -1,5 +1,6 @@
 package com.nikospavlopoulos.skydivingrest.model;
 
+import com.nikospavlopoulos.skydivingrest.core.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "user")
 public class User extends AbstractEntity {
 
     @Id
@@ -50,6 +51,8 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     private String lastname;
 
-//    private Role role; // TODO: Create Role Enum
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

@@ -1,5 +1,6 @@
 package com.nikospavlopoulos.skydivingrest.model;
 
+import com.nikospavlopoulos.skydivingrest.core.enums.Role;
 import com.nikospavlopoulos.skydivingrest.repository.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ class UserTest {
         user.setPassword("12345");
         user.setFirstname("Firstname");
         user.setLastname("Lastname");
+        user.setRole(Role.SKYDIVER);
 
         User savedUser = userRepository.saveAndFlush(user);
 
@@ -42,6 +44,7 @@ class UserTest {
         assertThat(foundUser.getPassword()).isNotNull();
         assertThat(foundUser.getFirstname()).isEqualTo("Firstname");
         assertThat(foundUser.getLastname()).isEqualTo("Lastname");
+        assertThat(foundUser.getRole()).isEqualTo(Role.SKYDIVER);
     }
 
     // Test not nullable values - Throw Exception DataIntegrityViolationException
@@ -49,7 +52,7 @@ class UserTest {
     @Test
     void userValidationTest() {
 
-        List<String> fields = List.of("username", "password", "firstname", "lastname");
+        List<String> fields = List.of("username", "password", "firstname", "lastname", "role");
 
 
         //Loop through fields checking and setting each for null
@@ -71,6 +74,9 @@ class UserTest {
             }
             else if (field.equals("lastname")) {
                 user.setLastname(null);
+            }
+            else if (field.equals("role")) {
+                user.setRole(null);
             }
 
             //Assert DataIntegrityViolation
@@ -132,6 +138,7 @@ class UserTest {
         user.setPassword("12345");
         user.setFirstname("Firstname");
         user.setLastname("Lastname");
+        user.setRole(Role.SKYDIVER);
         return user;
     }
 

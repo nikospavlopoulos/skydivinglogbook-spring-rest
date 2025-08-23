@@ -1,5 +1,6 @@
 package com.nikospavlopoulos.skydivingrest.model;
 
+import com.nikospavlopoulos.skydivingrest.core.enums.Role;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Aircraft;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Dropzone;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Jumptype;
@@ -30,6 +31,8 @@ class JumpTest {
     private DropzoneRepository dropzoneRepository;
     @Autowired
     private JumptypeRepository jumptypeRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Test Verify Successfull Create of a jump, and successful persistance in DB
 
@@ -49,7 +52,9 @@ class JumpTest {
         assertEquals(LocalDate.now().atStartOfDay(), foundJump.getJumpDate());
         assertEquals("Lorem", foundJump.getJumpNotes());
         assertEquals("Cessna", foundJump.getAircraft().getAircraftName());
-        assertEquals("Athens", foundJump.getDropzone().getDropzoneName());        assertEquals("Belly", foundJump.getJumptype().getJumptypeName());
+        assertEquals("Athens", foundJump.getDropzone().getDropzoneName());
+        assertEquals("Belly", foundJump.getJumptype().getJumptypeName());
+        assertEquals("user@user.com", foundJump.getUser().getUsername());
     }
 
     // Test not nullable values - Throw Exception DataIntegrityViolationException
@@ -128,6 +133,20 @@ class JumpTest {
 
     // Helper functions
 
+    private User jumpUser() {
+        User jumpUser = new User();
+        jumpUser.setUsername("user@user.com");
+        jumpUser.setPassword("12345");
+        jumpUser.setFirstname("Firstname");
+        jumpUser.setLastname("Lastname");
+        jumpUser.setRole(Role.SKYDIVER);
+        return jumpUser;
+    }
+
+    User persistUser () {
+        return userRepository.saveAndFlush(jumpUser());
+    }
+
     private Aircraft jumpAircraft() {
         Aircraft aircraft = new Aircraft();
         aircraft.setAircraftName("Cessna");
@@ -167,6 +186,7 @@ class JumpTest {
                 .aircraft(persistAircraft())
                 .dropzone(persistDropzone())
                 .jumptype(persistJumptype())
+                .user(persistUser())
                 .build();
     }
 }
