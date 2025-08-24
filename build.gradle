@@ -98,7 +98,40 @@ dependencies {
     // Spring Boot DevTools: automatic app restarts, LiveReload integration, disables template caching.
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    // Core MapStruct library — provides the annotations and API
+    // @Mapper, @Mapping, etc., in your code to define mappings.
+    implementation "org.mapstruct:mapstruct:1.6.3"
+
+    // Annotation Processor for MapStruct — runs at compile time
+    // Generates the mapper implementation classes
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.6.3"
+
+    // If you are using mapstruct in test code
+    // Use this if you need to generate mappers in your test code (e.g., unit tests
+    // where you want to map DTOs/entities without relying on main source mappers).
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.6.3"
+
 }
+
+// ----------------------------------------
+// MapStruct Configuration
+// ----------------------------------------
+compileJava {
+    // Pass compiler arguments for the MapStruct annotation processor
+    options.compilerArgs += [
+            '-Amapstruct.suppressGeneratorTimestamp=true',  // Prevents adding timestamps in generated code (cleaner git diffs)
+            '-Amapstruct.suppressGeneratorVersionInfoComment=true', // Removes generator version comments
+            '-Amapstruct.verbose=true' // Prints detailed logs during annotation processing (useful for debugging)
+    ]
+}
+compileTestJava {
+    options.compilerArgs += [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.suppressGeneratorVersionInfoComment=true',
+            '-Amapstruct.verbose=true'
+    ]
+}
+
 
 tasks.named('test') {
     useJUnitPlatform()  // Use JUnit 5 platform for testing
