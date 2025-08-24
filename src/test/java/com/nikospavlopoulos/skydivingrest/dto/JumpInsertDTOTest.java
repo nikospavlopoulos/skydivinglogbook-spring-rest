@@ -37,6 +37,7 @@ class JumpInsertDTOTest {
                 "Notes",
                 1L,
                 1L,
+                1L,
                 1L);
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -53,6 +54,7 @@ class JumpInsertDTOTest {
                 60,
                 LocalDateTime.now(),
                 "Notes",
+                1L,
                 1L,
                 1L,
                 1L);
@@ -80,6 +82,7 @@ class JumpInsertDTOTest {
                 "Notes",
                 1L,
                 1L,
+                1L,
                 1L
         );
 
@@ -101,6 +104,7 @@ class JumpInsertDTOTest {
                 50,
                 jumpDate,
                 "Notes",
+                1L,
                 1L,
                 1L,
                 1L
@@ -135,6 +139,7 @@ class JumpInsertDTOTest {
                 50,
                 LocalDateTime.now(),
                 notes,
+                1L,
                 1L,
                 1L,
                 1L
@@ -172,6 +177,7 @@ class JumpInsertDTOTest {
                 "Notes",
                 1L,
                 1L,
+                1L,
                 1L);
 
         switch(field) {
@@ -193,6 +199,9 @@ class JumpInsertDTOTest {
             case "jumptypeId":
                 dto.setJumptypeId((Long) value);
                 break;
+            case "userId":
+                dto.setUserId((Long) value);
+                break;
         }
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -208,7 +217,8 @@ static Stream<Arguments> nullProvider() {
                 Arguments.of("jumpDate", null),
                 Arguments.of("aircraftId", null),
                 Arguments.of("dropzoneId", null),
-                Arguments.of("jumptypeId", null)
+                Arguments.of("jumptypeId", null),
+                Arguments.of("userId", null)
                 );
     }
 
