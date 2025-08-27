@@ -1,0 +1,30 @@
+package com.nikospavlopoulos.skydivingrest.config;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
+/**
+ * Configuration class for customizing Jackson {@link ObjectMapper}
+ * Provides a customized {@link ObjectMapper} bean for the application context
+ * Ensures Dates are written in ISO-8601 string format instead of Unix timestamps
+ */
+
+@Configuration
+public class JacksonConfig { // TODO: Remember to write TEST
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.registerModule(new JavaTimeModule());
+
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        return objectMapper;
+    }
+
+}
