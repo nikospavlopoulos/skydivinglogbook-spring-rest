@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -39,7 +40,7 @@ class ErrorHandlerTest {
     // Test - Internal Server Exception
     @Test
     void handleInternalServerException_returns500Response() {
-        InternalServerException exception = new InternalServerException("Internal Server Error", "500");
+        InternalServerException exception = new InternalServerException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
 
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURI()).thenReturn("/api/test");
@@ -62,7 +63,7 @@ class ErrorHandlerTest {
     @Test
     void handleInvalidArgumentException_returns400Response() {
         InvalidArgumentException exception = new InvalidArgumentException(
-                "Bad Request", "400"
+                "Bad Request", HttpStatus.BAD_REQUEST
         );
 
         when(request.getMethod()).thenReturn("GET");
@@ -84,7 +85,7 @@ class ErrorHandlerTest {
     @Test
     void handleResourceConflictException_returns409Response() {
         ResourceConflictException exception = new ResourceConflictException(
-                "Conflict", "409"
+                "Conflict", HttpStatus.CONFLICT
         );
 
         when(request.getMethod()).thenReturn("GET");
@@ -106,7 +107,7 @@ class ErrorHandlerTest {
     @Test
     void handleResourceNotFoundException_returns404Response() {
         ResourceNotFoundException exception = new ResourceNotFoundException(
-                "Not Found", "404"
+                "Not Found", HttpStatus.NOT_FOUND
         );
 
         when(request.getMethod()).thenReturn("GET");
@@ -128,7 +129,7 @@ class ErrorHandlerTest {
     @Test
     void handleUnauthorizedException_returns401Response() {
         UnauthorizedException exception = new UnauthorizedException(
-                "Unauthorized", "401"
+                "Unauthorized", HttpStatus.UNAUTHORIZED
         );
 
         when(request.getMethod()).thenReturn("GET");
@@ -157,7 +158,7 @@ class ErrorHandlerTest {
         ));
 
         ValidationException exception = new ValidationException(
-                "Bad Request", "400", fieldErrors
+                "Bad Request", HttpStatus.BAD_REQUEST, fieldErrors
         );
 
         when(request.getMethod()).thenReturn("GET");
@@ -179,7 +180,7 @@ class ErrorHandlerTest {
     @Test
     void handleGenericException_returns500Response() {
         GenericException exception = new GenericException(
-                "Internal Server Error", "500"
+                "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR
         );
 
         when(request.getMethod()).thenReturn("GET");

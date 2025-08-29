@@ -35,13 +35,13 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode());
+                exception.getErrorCode().toString());
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                        null),
                 HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,13 +57,13 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode());
+                exception.getErrorCode().toString());
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.BAD_REQUEST,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         null),
                 HttpStatus.BAD_REQUEST);
@@ -80,14 +80,14 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode()
+                exception.getErrorCode().toString()
         );
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.CONFLICT,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         null),
                 HttpStatus.CONFLICT);
@@ -104,14 +104,14 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode()
+                exception.getErrorCode().toString()
         );
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.NOT_FOUND,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         null),
                 HttpStatus.NOT_FOUND
@@ -128,13 +128,13 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode());
+                exception.getErrorCode().toString());
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.UNAUTHORIZED,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         null),
                 HttpStatus.UNAUTHORIZED
@@ -152,14 +152,14 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode()
+                exception.getErrorCode().toString()
         );
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.BAD_REQUEST,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         exception.getFieldErrors()),
                 HttpStatus.BAD_REQUEST);
@@ -177,14 +177,14 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 exception,
                 exception.getMessage(),
                 request,
-                exception.getErrorCode()
+                exception.getErrorCode().toString()
         );
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         exception.getMessage(),
-                        exception.getErrorCode(),
+                        exception.getErrorCode().toString(),
                         request.getRequestURI(),
                         null),
                 HttpStatus.INTERNAL_SERVER_ERROR);

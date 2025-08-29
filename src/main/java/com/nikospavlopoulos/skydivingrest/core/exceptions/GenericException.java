@@ -1,15 +1,17 @@
 package com.nikospavlopoulos.skydivingrest.core.exceptions;
 
+import org.springframework.http.HttpStatus;
+
 public class GenericException extends RuntimeException {
 
-    private final String errorCode;
+    private final HttpStatus errorCode;
 
-    public GenericException(String message, String errorCode) {
+    public GenericException(String message, HttpStatus errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public String getErrorCode() {
+    public HttpStatus getErrorCode() {
         return errorCode;
     }
 
