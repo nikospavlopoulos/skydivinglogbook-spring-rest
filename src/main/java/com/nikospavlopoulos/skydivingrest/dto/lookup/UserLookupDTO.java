@@ -27,7 +27,6 @@ public class UserLookupDTO {
     private UUID uuid;
 
     private String username;
-    private String password;
 
     private String firstname;
     private String lastname;

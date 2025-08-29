@@ -31,7 +31,7 @@ class UserMapperTest {
         assertEquals(1L, dto.getId());
         assertEquals("test@test.com", dto.getUsername());
         assertEquals(user.getUuid(), dto.getUuid());
-        assertEquals(user.getPassword(), dto.getPassword());
+//        assertEquals(user.getPassword(), dto.getPassword());
         assertEquals("Nikos", dto.getFirstname());
         assertEquals("Test", dto.getLastname());
         assertEquals(Role.SKYDIVER, dto.getRole());
@@ -71,11 +71,11 @@ class UserMapperTest {
                 UserLookupDTO dto = userMapper.userToUserLookupDTO(user);
                 assertNull(dto.getUsername());
                 break;}
-            case "password":{
-                user.setPassword(null);
-                UserLookupDTO dto = userMapper.userToUserLookupDTO(user);
-                assertNull(dto.getPassword());
-                break;}
+//            case "password":{
+//                user.setPassword(null);
+//                UserLookupDTO dto = userMapper.userToUserLookupDTO(user);
+//                assertNull(dto.getPassword());
+//                break;}
             case "firstname":{
                 user.setFirstname(null);
                 UserLookupDTO dto = userMapper.userToUserLookupDTO(user);
