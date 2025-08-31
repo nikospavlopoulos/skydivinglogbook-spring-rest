@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class JumpMapperTest {
 
     @Autowired
@@ -92,7 +94,7 @@ class JumpMapperTest {
 
     private Jumptype jumptype = new Jumptype(1L, "Belly");
 
-    private User user = new User(1L, UUID.randomUUID(), "test@test.com", "a@123456", "Nikos", "Test", Role.SKYDIVER);
+    private User user = new User(1L, UUID.randomUUID(),Boolean.TRUE, "test@test.com", "a@123456", "Nikos", "Test", Role.SKYDIVER);
 
     private Jump createValidJump() {
         Jump jump = new Jump();

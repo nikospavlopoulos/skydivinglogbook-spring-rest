@@ -30,13 +30,8 @@ public class User extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private UUID uuid;
 
-    // Automatically Create UUID
-    @PrePersist
-    public void generateUUID() {
-        if (uuid == null) {
-            uuid = UUID.randomUUID();
-        }
-    }
+    @Column(nullable = false)
+    private Boolean active;
 
     @Column(nullable = false, unique = true)
     @Email
@@ -54,5 +49,16 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    // Automatically Create UUID and Default Active
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+        if (active == null) {
+            active = true;
+        }
+    }
 
 }

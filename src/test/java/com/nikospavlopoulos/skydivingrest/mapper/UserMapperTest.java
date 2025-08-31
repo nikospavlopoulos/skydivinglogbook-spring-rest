@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class UserMapperTest {
 
     @Autowired
@@ -101,6 +103,7 @@ class UserMapperTest {
         return new User(
                 1L,
                 UUID.randomUUID(),
+                Boolean.TRUE,
                 "test@test.com",
                 "a@123456",
                 "Nikos",
