@@ -33,4 +33,6 @@ public class UserLookupDTO {
 
     private Role role;
 
+    private Boolean active;
+
 }
