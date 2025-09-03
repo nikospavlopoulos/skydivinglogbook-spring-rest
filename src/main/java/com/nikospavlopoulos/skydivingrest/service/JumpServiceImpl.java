@@ -27,6 +27,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the IJumpService interface, providing business logic for managing skydiving jump records.
+ * Handles CRUD operations for Jump entities, including validation, mapping, and exception handling.
+ */
+
+
 @Service
 @RequiredArgsConstructor
 public class JumpServiceImpl implements IJumpService{
