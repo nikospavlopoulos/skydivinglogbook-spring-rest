@@ -26,6 +26,7 @@ public class JumpLookupDTO {
     private Long id;
     private UUID uuid;
 
+    private Long jumpNumber;
     private Integer altitude;
     private Integer freeFallDuration;
     private LocalDateTime jumpDate;

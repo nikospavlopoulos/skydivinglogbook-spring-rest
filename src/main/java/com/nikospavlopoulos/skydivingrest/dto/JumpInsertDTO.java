@@ -27,7 +27,6 @@ public class JumpInsertDTO {
 
     @NotNull(message = "Date must not be empty")
     @PastOrPresent(message = "Date must not be in the Future")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime jumpDate;
 
     @Size(max = 500, message = "Notes must be under 500 characters")

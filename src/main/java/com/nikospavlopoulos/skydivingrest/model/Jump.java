@@ -4,9 +4,9 @@ import com.nikospavlopoulos.skydivingrest.model.static_data.Aircraft;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Dropzone;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Jumptype;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -24,14 +24,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "jump")
+@Table(name = "jump", indexes = {@Index(name = "idx_user_date_jump", columnList = "user_id, jumpDate, jumptype_id, id")})
 public class Jump extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private UUID uuid;
 
     // Automatically Create UUID
@@ -46,15 +46,13 @@ public class Jump extends AbstractEntity {
     @Column(nullable = false)
     private Integer altitude;
 
-    @Positive
+    @PositiveOrZero
     @Column(nullable = false)
     private Integer freeFallDuration;
 
     @PastOrPresent
     @Column(nullable = false)
     private LocalDateTime jumpDate;
-
-    private String jumpNotes;
 
     @ManyToOne
     @JoinColumn(name = "aircraft_id", nullable = false)
@@ -69,6 +67,9 @@ public class Jump extends AbstractEntity {
     private Jumptype jumptype;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
+
+    private String jumpNotes;
+
 }

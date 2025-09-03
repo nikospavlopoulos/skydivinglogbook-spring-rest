@@ -38,7 +38,7 @@ public class User extends AbstractEntity {
     private String username;
 
     @Column(nullable = false)
-    private String password; // TODO: Password Encryption
+    private String password;
 
     @Column(nullable = false)
     private String firstname;

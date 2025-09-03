@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-public class JacksonConfig { // TODO: Remember to write TEST
+public class JacksonConfig {
 
     @Bean
     public ObjectMapper objectMapper() {
