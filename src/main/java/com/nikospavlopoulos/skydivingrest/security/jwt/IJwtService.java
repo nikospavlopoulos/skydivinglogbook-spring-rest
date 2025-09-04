@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IJwtService {
 
-    String generateToken(String username, List<String> roles);
+    String generateToken(String username, String role);
 
     boolean validateToken(String token);
 

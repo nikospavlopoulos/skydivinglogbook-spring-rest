@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Page<User> findAllByRole(Role role, Pageable pageable);
 
+    User getReferenceByUsername(String username);
+
 
 //    String username(String username);
 }

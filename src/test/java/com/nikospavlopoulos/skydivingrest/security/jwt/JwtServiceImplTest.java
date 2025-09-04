@@ -42,7 +42,7 @@ class JwtServiceImplTest {
 
 //        ReflectionTestUtils.setField(jwtService, "jwtExpiration", 60);
 
-        String token = jwtService.generateToken("testUsername", List.of("SKYDIVER", "ADMIN"));
+        String token = jwtService.generateToken("testUsername", "Skydiver");
 
         Jws<Claims> claims = Jwts.parser()
                 .verifyWith(secretKey)
@@ -56,7 +56,8 @@ class JwtServiceImplTest {
         Instant tokenExpiration = claims.getPayload().getExpiration().toInstant();
 
         assertEquals(expectedExpiration, tokenExpiration);
-        assertTrue(claims.getPayload().get("roles", List.class).containsAll(List.of("SKYDIVER", "ADMIN")));
+        assertEquals("SKYDIVER", claims.getPayload().get("role", String.class));
+
     }
 
 
@@ -76,7 +77,7 @@ class JwtServiceImplTest {
 
         JwtServiceImpl jwtService = factorySetUp(clock);
 
-        String token = jwtService.generateToken("testUsername", List.of("SKYDIVER", "ADMIN"));
+        String token = jwtService.generateToken("testUsername", "Skydiver");
 
         // Assert
 
@@ -98,7 +99,7 @@ class JwtServiceImplTest {
 
         JwtServiceImpl jwtService = factorySetUp(clock);
 
-        String token = jwtService.generateToken("testUsername", List.of("SKYDIVER", "ADMIN"));
+        String token = jwtService.generateToken("testUsername", "Skydiver");
 
         // Assert
 
@@ -152,7 +153,7 @@ class JwtServiceImplTest {
 
         JwtServiceImpl jwtService = factorySetUp(clock);
 
-        String token = jwtService.generateToken("testUsername", List.of("SKYDIVER", "ADMIN"));
+        String token = jwtService.generateToken("testUsername", "Skydiver");
 
         // Assert
         assertEquals("testUsername", jwtService.extractUsername(token));

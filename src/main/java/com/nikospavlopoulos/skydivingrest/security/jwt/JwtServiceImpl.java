@@ -44,20 +44,20 @@ public class JwtServiceImpl implements IJwtService{
     private final Clock clock;
 
     /**
-     * Generates a JWT token with subject (username) and roles.
+     * Generates a JWT token with subject (username) and role.
      *
      * @param username the authenticated user's name
-     * @param roles    list of roles for authorization
+     * @param role    list of role for authorization
      * @return a signed JWT as a String
      */
     @Override
-    public String generateToken(String username, List<String> roles) {
+    public String generateToken(String username, String role) {
         // Calculate timestamps based on injected clock
         Instant issuedAt = clock.instant();
         Instant expiresAt = issuedAt.plus(jwtExpiration, ChronoUnit.MINUTES);
-        // Add custom claims (e.g., roles)
+        // Add custom claims (e.g., role)
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", roles);
+        claims.put("role", role);
 
         // Build and sign the JWT
         return Jwts.builder()
