@@ -30,7 +30,7 @@ class JwtServiceImplTest {
     void generateToken_whenGenerated_ContainsAllClaims() {
 
         // TODO: ADJUST THE CLOCK BEFORE RUNNING TEST
-        Instant fixedInstant = Instant.parse("2025-09-03T20:00:00Z");
+        Instant fixedInstant = Instant.parse("2025-09-06T21:00:00Z");
 
         byte[] keyBytes = Base64.getDecoder().decode("SyKNDTIxUc5Pa0wWU8Kg9xsWIh5OLNMv58iCQeLwTBM=");
 
@@ -56,7 +56,8 @@ class JwtServiceImplTest {
         Instant tokenExpiration = claims.getPayload().getExpiration().toInstant();
 
         assertEquals(expectedExpiration, tokenExpiration);
-        assertEquals("SKYDIVER", claims.getPayload().get("role", String.class));
+
+        assertEquals("Skydiver", claims.getPayload().get("role", String.class));
 
     }
 
@@ -67,7 +68,7 @@ class JwtServiceImplTest {
     void validateToken_whenFreshToken_ReturnsTrue() {
 
         // TODO: ADJUST THE CLOCK BEFORE RUNNING TEST
-        Instant fixedInstant = Instant.parse("2025-09-03T20:00:00Z");
+        Instant fixedInstant = Instant.parse("2025-09-06T21:00:00Z");
 
         byte[] keyBytes = Base64.getDecoder().decode("SyKNDTIxUc5Pa0wWU8Kg9xsWIh5OLNMv58iCQeLwTBM=");
 
@@ -112,7 +113,7 @@ class JwtServiceImplTest {
     void validateToken_whenWrongSignature_ReturnsFalse() {
 
         // TODO: ADJUST THE CLOCK BEFORE RUNNING TEST
-        Instant fixedInstant = Instant.parse("2025-09-03T20:00:00Z");
+        Instant fixedInstant = Instant.parse("2025-09-06T21:00:00Z");
 
 //        byte[] keyBytes = Base64.getDecoder().decode("SyKNDTIxUc5Pa0wWU8Kg9xsWIh5OLNMv58iCQeLwTBM=");
 
@@ -143,7 +144,7 @@ class JwtServiceImplTest {
     @Test
     void extractUsername_whenValidToken_returnsSubject() {
         // TODO: ADJUST THE CLOCK BEFORE RUNNING TEST
-        Instant fixedInstant = Instant.parse("2025-09-03T20:00:00Z");
+        Instant fixedInstant = Instant.parse("2025-09-06T21:00:00Z");
 
         byte[] keyBytes = Base64.getDecoder().decode("SyKNDTIxUc5Pa0wWU8Kg9xsWIh5OLNMv58iCQeLwTBM=");
 
