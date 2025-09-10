@@ -52,7 +52,6 @@ public class JumpServiceImpl implements IJumpService{
     @Override
     @Transactional
     public JumpLookupDTO createJump(JumpInsertDTO dto) {
-        // TODO: Refactor when Authorization confirm Owner - or throw UnauthorizedException (Use @PreAuthorize annotation
 
         Jump jump = jumpMapper.jumpInsertDTOtoJumpEntity(dto);
 
@@ -175,7 +174,11 @@ public class JumpServiceImpl implements IJumpService{
 
     @Override
     @Transactional
-    public Page<JumpLookupDTO> searchJumps(Long userId, LocalDateTime jumpDateFrom, LocalDateTime jumpDateTo, Jumptype jumptype, Pageable pageable) throws ResourceNotFoundException {
+    public Page<JumpLookupDTO> searchJumps(Long userId, LocalDateTime jumpDateFrom, LocalDateTime jumpDateTo, Jumptype jumptype, Pageable pageable) {
+
+        if (jumpDateFrom.isAfter(jumpDateTo)) {
+            throw new InvalidArgumentException("The 'From' date should be before the 'To' date", HttpStatus.BAD_REQUEST);
+        }
 
         Specification<Jump> spec = JumpSpecifications.filterJumps(userId, jumpDateFrom, jumpDateTo, jumptype);
 

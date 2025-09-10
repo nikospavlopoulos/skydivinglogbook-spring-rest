@@ -47,12 +47,14 @@ public class UserServiceImpl implements IUserService{
         // Normalize (trim & LowerCase) username/email
         String username = dto.getUsername().trim().toLowerCase(Locale.ROOT);
 
-        // Debugging user already exists
-        System.out.println("\n------");
-        System.out.println("Normalized username: " + username);
-        System.out.println("DB count: " + userRepository.count());
-        System.out.println("Existing user: " + userRepository.findByUsernameAndActiveIsTrue(username));
-        System.out.println("------\n");
+        /*
+            // Debugging user already exists
+            System.out.println("\n------");
+            System.out.println("Normalized username: " + username);
+            System.out.println("DB count: " + userRepository.count());
+            System.out.println("Existing user: " + userRepository.findByUsernameAndActiveIsTrue(username));
+            System.out.println("------\n");
+        */
 
         if (userRepository.findByUsernameAndActiveIsTrue(username).isPresent()) {
             throw new ResourceConflictException("The user with email: " + username + " already exists.", HttpStatus.CONFLICT);

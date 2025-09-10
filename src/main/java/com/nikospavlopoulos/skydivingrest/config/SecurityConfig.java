@@ -55,12 +55,14 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/api/user/*").authenticated()
-                        .requestMatchers("/api/jump/*").authenticated()
-                        .requestMatchers("/api/jump/all").authenticated()
-                        .requestMatchers("/api/static/**").authenticated()
+//                        .requestMatchers("/api/auth/login").permitAll()
+//                        .requestMatchers("/api/auth/register").permitAll()
+//                        .requestMatchers("/api/static/**").authenticated()
+//                        .requestMatchers("/api/jump/all").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll() // for login and register
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/jumps/**").authenticated()
+                        .requestMatchers("/api/lookups/**").authenticated() // for static - reference data (dropzones, jumptypes, aircraft)
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/").permitAll()

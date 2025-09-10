@@ -31,4 +31,9 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    // getter for user.id (to be available as principal.user.id)
+    public Long getId() {
+        return user.getId();
+    }
 }

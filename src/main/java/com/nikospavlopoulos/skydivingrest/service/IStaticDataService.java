@@ -1,5 +1,8 @@
 package com.nikospavlopoulos.skydivingrest.service;
 
+import com.nikospavlopoulos.skydivingrest.dto.lookup.AircraftLookupDTO;
+import com.nikospavlopoulos.skydivingrest.dto.lookup.DropzoneLookupDTO;
+import com.nikospavlopoulos.skydivingrest.dto.lookup.JumptypeLookupDTO;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Aircraft;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Dropzone;
 import com.nikospavlopoulos.skydivingrest.model.static_data.Jumptype;
@@ -14,10 +17,10 @@ import java.util.List;
 
 public interface IStaticDataService {
 
-    List<Aircraft> findAllAircraft();
+    List<AircraftLookupDTO> findAllAircraft();
 
-    List<Dropzone> findAllDropzones();
+    List<DropzoneLookupDTO> findAllDropzones();
 
-    List<Jumptype> findAllJumptypes();
+    List<JumptypeLookupDTO> findAllJumptypes();
 
 }

@@ -23,4 +23,6 @@ public class PasswordUpdateDTO {
     @Pattern(regexp = "^(?=(.*[A-Za-z]){1})(?=(.*\\d){1})(?=(.*[!@#$%^&*(),.?\":{}|<>]){1}).{8,}$", message = "Password must be at least 8 characters long, include letters, numbers, and one special character")
     private String newPassword;
 
+    public record MessageResponse(String message) {}
+
 }

@@ -37,4 +37,6 @@ public class JumpLookupDTO {
     private JumptypeLookupDTO jumptype;
 
     private UserLookupDTO user;
+
+    public record MessageResponse(String message, JumpLookupDTO jumpLookupDTO) {}
 }

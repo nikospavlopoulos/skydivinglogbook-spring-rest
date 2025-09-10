@@ -166,6 +166,11 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /*
+    // TODO: Handle AccessDeniedException
+    Ensure global ErrorHandler maps that exception to a 403 - Forbidden JSON response.
+     */
+
     // Handle - Generic Exception = handleGenericException
 
     @ExceptionHandler(GenericException.class)

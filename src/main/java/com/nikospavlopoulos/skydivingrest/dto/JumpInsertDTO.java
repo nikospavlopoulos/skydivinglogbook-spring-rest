@@ -41,7 +41,7 @@ public class JumpInsertDTO {
     @NotNull(message = "Jump Type can not be empty")
     private Long jumptypeId;
 
-    @NotNull(message = "User can not be empty")
+    @Null // Client should not send it. It needs to be set by the controller through principal
     private Long userId;
 
 }
