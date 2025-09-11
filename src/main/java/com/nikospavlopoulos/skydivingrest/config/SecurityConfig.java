@@ -7,16 +7,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -36,10 +42,20 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-//    @Autowired
-//    private CustomAccessDeniedHandler accessDeniedHandler;
-//    @Autowired
-//    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:*")); // frontend served by same server
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*")); // Authorization, Content-Type, etc.
+        configuration.setAllowCredentials(true); // for use if cookies (currently using JWT in headers)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,7 +65,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+                .cors(Customizer.withDefaults())
                 .exceptionHandling(exception ->
                         exception
                                 .authenticationEntryPoint(customAuthenticationEntryPoint())
@@ -58,17 +74,26 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
+                        // REST API endpoints
                         .requestMatchers("/api/auth/**").permitAll() // for login and register
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers("/api/jumps/**").authenticated()
                         .requestMatchers("/api/lookups/**").authenticated() // for static - reference data (dropzones, jumptypes, aircraft)
+
+                        // Swagger / H2
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated()
-                );
 
-                //TODO: After Controllers CORS configuration to allow All Methods for the UI
+                        // Static frontend files
+                        .requestMatchers("/", "/index.html", "/register.html").permitAll()
+                        .requestMatchers("/css/**", "/js/**").permitAll()
+
+                        // All other requests require authentication
+                        .anyRequest().authenticated()
+                )
+
+                    // allow H2 console frames
+                    .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
                 return http.build();
     }
