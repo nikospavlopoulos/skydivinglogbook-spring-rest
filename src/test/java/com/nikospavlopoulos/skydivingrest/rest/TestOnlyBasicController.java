@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/api/jumps")
 public class TestOnlyBasicController {
 
-    @GetMapping("/all")
+    @GetMapping("/test")
     public ResponseEntity<Map<String, String>> getAllJumps() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "controller working");

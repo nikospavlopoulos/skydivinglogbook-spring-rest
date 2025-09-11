@@ -11,15 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,7 +45,6 @@ public class UserController {
 
         return ResponseEntity.created(location).body(userLookupDTO);
 
-        // TODO: log message
     }
 
     // GET /users/{id} - Retrieve User Profile
@@ -56,16 +52,10 @@ public class UserController {
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<UserLookupDTO> getUser(@PathVariable("id") Long id, @AuthenticationPrincipal CustomUserDetails principal) {
 
-        // Confirming Owner
-        if (!id.equals(principal.getId())) {
-            throw new AccessDeniedException("You can not access another user's profile");
-        }
-
         UserLookupDTO userLookupDTO = userService.getUser(id);
 
         return ResponseEntity.ok(userLookupDTO);
 
-        // TODO: log message
 
     }
 
@@ -75,16 +65,10 @@ public class UserController {
     @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserLookupDTO> updateUser(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateDTO userUpdateDTO, @AuthenticationPrincipal CustomUserDetails principal) {
 
-        // Confirming Owner
-        if (!id.equals(principal.getId())) {
-            throw new AccessDeniedException("You can not update another user's profile");
-        }
-
         UserLookupDTO userLookupDTO = userService.updateUser(id, userUpdateDTO);
 
         return ResponseEntity.ok(userLookupDTO);
 
-        // TODO: log message
 
     }
 
@@ -94,16 +78,10 @@ public class UserController {
     @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<PasswordUpdateDTO.MessageResponse> changePassword(@PathVariable("id") Long id, @RequestBody @Valid PasswordUpdateDTO passwordUpdateDTO, @AuthenticationPrincipal CustomUserDetails principal) {
 
-        // Confirming Owner
-        if (!id.equals(principal.getId())) {
-            throw new AccessDeniedException("You can not change another user's password");
-        }
-
         userService.changePassword(id, passwordUpdateDTO);
 
         return ResponseEntity.ok(new PasswordUpdateDTO.MessageResponse("Password Updated Successfully"));
 
-        // TODO: log message
 
     }
 
@@ -112,16 +90,10 @@ public class UserController {
     @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserLookupDTO> deactivateUser(@PathVariable("id") Long id, @AuthenticationPrincipal CustomUserDetails principal) {
 
-        // Confirming Owner
-        if (!id.equals(principal.getId())) {
-            throw new AccessDeniedException("You can not delete another user's profile");
-        }
-
         UserLookupDTO userLookupDTO = userService.deactivateUser(id);
 
         return ResponseEntity.ok(userLookupDTO);
 
-        // TODO: log message
 
     }
 
@@ -134,7 +106,6 @@ public class UserController {
 
         return ResponseEntity.ok(userLookupDTOPage);
 
-        // TODO: log message
 
     }
 

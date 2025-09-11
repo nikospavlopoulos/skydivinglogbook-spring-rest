@@ -57,7 +57,7 @@ class SecurityIntegrationTest {
 
         String token = jwtService.generateToken(user.getUsername(), user.getRole().toString());
 
-        mockMvc.perform(get("/api/jumps/all")
+        mockMvc.perform(get("/api/jumps/test")
                 .header(AUTH_HEADER, BEARER_PREFIX + token))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
@@ -69,7 +69,7 @@ class SecurityIntegrationTest {
 
     @Test
     void accessProtected_whenInvalidTokens_returns401() throws Exception {
-        String validEndpoint = "/api/jumps/all";
+        String validEndpoint = "/api/jumps/test";
 
         // Missing token
         mockMvc.perform(get(validEndpoint))
@@ -120,7 +120,7 @@ class SecurityIntegrationTest {
 /*
     @Test
     void accessProtected_whenInvalidTokens_returns401() throws Exception {
-        String endpoint = "/api/jumps/all";
+        String endpoint = "/api/jumps/test";
 
         // Missing token
         mockMvc.perform(get(endpoint))

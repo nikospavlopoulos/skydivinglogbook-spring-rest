@@ -12,7 +12,7 @@ import java.util.UUID;
 
 /**
  * User entity in the database
- * Implements {@link UserDetails//} interface required from Spring Security // TODO: Activate Security - Implement UserDetails
+ * Implements {@link UserDetails//} interface required from Spring Security
  */
 
 @Entity

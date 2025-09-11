@@ -52,7 +52,6 @@ public class JumpController {
 
         return ResponseEntity.created(location).body(createdJump);
 
-        // TODO: log message
     }
 
 
@@ -72,7 +71,6 @@ public class JumpController {
 
         return ResponseEntity.ok(retrievedJump);
 
-        // TODO: log message
     }
 
 
@@ -96,7 +94,6 @@ public class JumpController {
 
         return ResponseEntity.ok(updatedJump);
 
-        // TODO: log message
         }
 
 
@@ -119,7 +116,6 @@ public class JumpController {
 
         return ResponseEntity.ok(new JumpLookupDTO.MessageResponse("Jump Was Successfully Deleted", deletedJump));
 
-        // TODO: log message
     }
 
 
@@ -135,7 +131,6 @@ public class JumpController {
 
         return ResponseEntity.ok(jumpLookupDTOPage);
 
-        // TODO: log message
     }
 
 
@@ -150,7 +145,6 @@ public class JumpController {
 
         return ResponseEntity.ok(totalFreeFall);
 
-        // TODO: log message
     }
 
 
@@ -166,7 +160,6 @@ public class JumpController {
 
         return ResponseEntity.ok(totalJumps);
 
-        // TODO: log message
     }
 
     // GET /api/jumps/search (Paginated Search)
@@ -184,7 +177,6 @@ public class JumpController {
 
         return ResponseEntity.ok(searchedJumpsResult);
 
-        // TODO: log message
     }
 
 }

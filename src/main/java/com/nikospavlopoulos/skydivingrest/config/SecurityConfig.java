@@ -5,8 +5,10 @@ import com.nikospavlopoulos.skydivingrest.security.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -55,21 +58,17 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
-//                        .requestMatchers("/api/auth/login").permitAll()
-//                        .requestMatchers("/api/auth/register").permitAll()
-//                        .requestMatchers("/api/static/**").authenticated()
-//                        .requestMatchers("/api/jump/all").authenticated()
                         .requestMatchers("/api/auth/**").permitAll() // for login and register
-                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers("/api/jumps/**").authenticated()
                         .requestMatchers("/api/lookups/**").authenticated() // for static - reference data (dropzones, jumptypes, aircraft)
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/").permitAll()
+                        .anyRequest().authenticated()
                 );
 
                 //TODO: After Controllers CORS configuration to allow All Methods for the UI
-                //TODO: Ensure @PreAuthorize for SKYDIVER & ADMIN
 
                 return http.build();
     }

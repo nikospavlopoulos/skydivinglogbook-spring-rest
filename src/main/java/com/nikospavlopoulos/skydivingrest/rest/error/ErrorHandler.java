@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -71,7 +72,6 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     // Handle - ResourceConflictException = handleResourceConflictException
-
     @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<ApiErrorResponseDTO>
                     handleResourceConflictException(ResourceConflictException exception, HttpServletRequest request) {
@@ -167,9 +167,28 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     /*
-    // TODO: Handle AccessDeniedException
     Ensure global ErrorHandler maps that exception to a 403 - Forbidden JSON response.
      */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponseDTO> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+
+        logException(
+                HttpStatus.FORBIDDEN,
+                exception,
+                exception.getMessage(),
+                request,
+                "403"
+        );
+
+        return new ResponseEntity<>(
+                createErrorResponse(
+                        HttpStatus.FORBIDDEN,
+                        exception.getMessage(),
+                        "403",
+                        request.getRequestURI(),
+                        null),
+                HttpStatus.FORBIDDEN);
+    }
 
     // Handle - Generic Exception = handleGenericException
 

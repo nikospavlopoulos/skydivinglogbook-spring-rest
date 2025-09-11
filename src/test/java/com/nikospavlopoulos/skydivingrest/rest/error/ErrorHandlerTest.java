@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -176,7 +177,29 @@ class ErrorHandlerTest {
         assertEquals("/api/test", response.getBody().getPath());
         assertTrue(response.getBody().getFieldErrors().size() == 1);
     }
-    
+
+    @Test
+    void handleAccessDeniedException_returns403() {
+        AccessDeniedException exception = new AccessDeniedException(
+                "Access is denied"
+        );
+
+        when(request.getMethod()).thenReturn("GET");
+        when(request.getRequestURI()).thenReturn("/api/test");
+
+        ResponseEntity<ApiErrorResponseDTO> response = errorHandler.handleAccessDeniedException(exception, request);
+
+        // Asserts
+
+        assertEquals(403, response.getStatusCode().value()); /// QUESTION: Probably going to fail, the AccessDeniedHandler does not give me getStatusCode(). Why is this happening? Help me resolve this.
+
+        assertEquals("Forbidden", response.getBody().getError());
+        assertEquals("Access is denied", response.getBody().getMessage());
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals("/api/test", response.getBody().getPath());
+
+    }
+
     @Test
     void handleGenericException_returns500Response() {
         GenericException exception = new GenericException(
