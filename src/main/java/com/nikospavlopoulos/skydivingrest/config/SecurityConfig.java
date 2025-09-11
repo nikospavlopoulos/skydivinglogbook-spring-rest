@@ -3,6 +3,7 @@ package com.nikospavlopoulos.skydivingrest.config;
 import com.nikospavlopoulos.skydivingrest.security.*;
 import com.nikospavlopoulos.skydivingrest.security.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -46,9 +47,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:*")); // frontend served by same server
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*")); // Authorization, Content-Type, etc.
+
+        // Allow Live Server frontend
+        configuration.setAllowedOrigins(List.of(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500"
+        ));
+
+        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // frontend served by same server
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Authorization, Content-Type
         configuration.setAllowCredentials(true); // for use if cookies (currently using JWT in headers)
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -84,9 +92,14 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
+                /*
                         // Static frontend files
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/index.html", "/register.html").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
+                        .requestMatchers("/dashboard.html").authenticated()
+
+                 */
 
                         // All other requests require authentication
                         .anyRequest().authenticated()

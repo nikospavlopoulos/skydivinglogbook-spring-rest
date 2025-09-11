@@ -50,6 +50,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String username;
         final boolean isValid;
 
+        String path = request.getRequestURI();
+
+
+        // Skip JWT validation for public endpoints
+        if (path.startsWith("/api/auth")
+                || (path.equals("/api/users") && "POST".equalsIgnoreCase(request.getMethod()))
+                || path.startsWith("/swagger-ui/")
+                || path.startsWith("/h2-console/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         // Short-circuit if header missing or not Bearer
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
