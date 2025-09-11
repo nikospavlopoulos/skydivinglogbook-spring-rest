@@ -9,8 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
     if (registerForm) registerForm.addEventListener('submit', handleRegister);
 
+    console.log('DOM loaded, initializing...');
     const loginForm = document.getElementById('login-form');
-    if (loginForm) loginForm.addEventListener('submit', handleLogin);
+    if (loginForm) {
+        console.log('Login form found, attaching event listener');
+        loginForm.addEventListener('submit', (event) => {
+            console.log('Submit event triggered');
+            handleLogin(event);
+        }, { once: true });
+    } else {
+        console.error('Login form not found');
+    }
 
     const dashboardContainer = document.getElementById('dashboard-container');
     if (dashboardContainer) loadDashboard();

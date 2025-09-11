@@ -7,6 +7,8 @@
  * @returns {Promise<Response>}
  */
 
+
+
 export async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('jwtToken');
 
@@ -37,15 +39,8 @@ export async function fetchWithAuth(url, options = {}) {
 
 
 
-
-
-
-
-
-
-
-
 /*
+
 
 export async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('jwtToken');
@@ -63,4 +58,4 @@ export async function fetchWithAuth(url, options = {}) {
     return response;
 }
 
- */
+*/
