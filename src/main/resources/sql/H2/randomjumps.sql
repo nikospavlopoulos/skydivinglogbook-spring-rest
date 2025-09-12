@@ -25,3 +25,4 @@ VALUES
     (12392, 58, 2, NOW(), 2, 23, '2025-05-13 10:49:06', 1, NOW(), 1, 'fcd7137a-0c41-429e-9817-0b1eaf1c1e1c', 'Randomized jump notes'),
     (12362, 60, 5, NOW(), 3, 24, '2025-06-17 10:49:06', 3, NOW(), 1, '61f6ad5b-3358-4d39-9310-cc1dd4ed276e', 'Randomized jump notes'),
     (12711, 56, 4, NOW(), 1, 25, '2025-02-03 10:49:06', 1, NOW(), 1, 'ae4d68cf-80cc-4d25-b2f8-6a24bc561479', 'Randomized jump notes');
+ALTER TABLE "jump" ALTER COLUMN "id" RESTART WITH 26;

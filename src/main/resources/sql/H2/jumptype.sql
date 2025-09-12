@@ -3,3 +3,4 @@ INSERT INTO "jumptype" ("id", "jumptype_name", "created_at", "updated_at") VALUE
 (2, 'Angle', NOW(), NOW()),
 (3, 'Freefly', NOW(), NOW()),
 (4, 'Formation', NOW(), NOW());
+ALTER TABLE "jumptype" ALTER COLUMN "id" RESTART WITH 5;

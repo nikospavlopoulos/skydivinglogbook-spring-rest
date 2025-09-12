@@ -4,6 +4,7 @@ INSERT INTO "aircraft" ("id", "aircraft_name", "created_at", "updated_at") VALUE
 (3, 'Cessna 182 - Skylane', NOW(), NOW()),
 (4, 'Helicopter Bell 412', NOW(), NOW()),
 (5, 'Falcon9 - SpaceX Rocket', NOW(), NOW());
+ALTER TABLE "aircraft" ALTER COLUMN "id" RESTART WITH 6;
 
 INSERT INTO "dropzone" ("id", "dropzone_name", "created_at", "updated_at") VALUES
 (1, 'Hellenic Skydivers - Thiva Perneri Airfield', NOW(), NOW()),
@@ -11,9 +12,11 @@ INSERT INTO "dropzone" ("id", "dropzone_name", "created_at", "updated_at") VALUE
 (3, 'Skydive Attica - Megara General Aviation Airport ', NOW(), NOW()),
 (4, 'Skydive Greece - Megara General Aviation Airport', NOW(), NOW()),
 (5, 'Skydive Thessaloniki - Chortero Airport', NOW(), NOW());
+ALTER TABLE "dropzone" ALTER COLUMN "id" RESTART WITH 6;
 
 INSERT INTO "jumptype" ("id", "jumptype_name", "created_at", "updated_at") VALUES
 (1, 'Belly', NOW(), NOW()),
 (2, 'Angle', NOW(), NOW()),
 (3, 'Freefly', NOW(), NOW()),
 (4, 'Formation', NOW(), NOW());
+ALTER TABLE "jumptype" ALTER COLUMN "id" RESTART WITH 5;

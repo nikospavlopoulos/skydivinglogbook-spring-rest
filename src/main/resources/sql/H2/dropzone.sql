@@ -4,3 +4,4 @@ INSERT INTO "dropzone" ("id", "dropzone_name", "created_at", "updated_at") VALUE
 (3, 'Skydive Attica - Megara General Aviation Airport ', NOW(), NOW()),
 (4, 'Skydive Greece - Megara General Aviation Airport', NOW(), NOW()),
 (5, 'Skydive Thessaloniki - Chortero Airport', NOW(), NOW());
+ALTER TABLE "dropzone" ALTER COLUMN "id" RESTART WITH 6;
