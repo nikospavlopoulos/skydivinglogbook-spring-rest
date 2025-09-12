@@ -1,4 +1,3 @@
-Readme
 # Skydiving Logbook REST API
 
 A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`. The core work of the backend is complete, while the frontend is a work in progress.
