@@ -140,10 +140,9 @@ skydiving-logbook-api/
 │   │   │       └── specification/         # JPA specifications for search queries
 │   │   └── resources/
 │   │       ├── application.properties     # Configuration properties (dev/test profiles)
-│   │       └── data-h2.sql / data-mysql.sql # Database initialization scripts
+│   │       └── sql/                       # Database initialization scripts (H2 / MySQL)
 │   └── test/
 │       └── java/                          # Tests (repositories, services, controllers, security)
-├── pom.xml                                # Maven build file with dependencies
 ├── LICENSE                                # MIT License
 └── README.md                              # This file
 ```
