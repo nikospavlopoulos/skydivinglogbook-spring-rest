@@ -6,9 +6,66 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
+
+
+
 <body>
 <div class="container" id="dashboard-container">
-    <!-- JS will dynamically populate content here -->
+
+    <header>
+        <h2 id="welcome-message"></h2>
+    </header>
+
+    <main>
+
+        <div class="stats-container" style="display: flex; gap: 20px; margin-bottom: 20px;">
+            
+            <div class="stat-card" style="border: 1px solid #ccc; padding: 10px; flex: 1;">
+                <h3>Total Jumps</h3>
+                <p id="total-jumps">Loading...</p>
+            </div>
+
+            <div class="stat-card" style="border: 1px solid #ccc; padding: 10px; flex: 1;">
+                <h3>Total Freefall Time</h3>
+                <p id="total-freefall">Loading...</p>
+            </div>
+        </div>
+
+        <div id="jumps-table-container">
+            <table id="jumps-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th data-sort="jumpNumber">Jump Number</th>
+                        <th data-sort="altitude">Altitude</th>
+                        <th data-sort="freeFallDuration">Freefall Duration</th>
+                        <th data-sort="jumpDate">Jump Date</th>
+                        <th data-sort="jumpNotes">Notes</th>
+                        <th data-sort="aircraft.name">Aircraft</th>
+                        <th data-sort="dropzone.name">Dropzone</th>
+                        <th data-sort="jumptype.name">Jump Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="jumps-table-body"></tbody>
+            </table>
+            <div id="pagination-controls" style="margin-top: 10px; text-align: center;">
+                <button id="prev-page" disabled>Previous</button>
+                <span id="page-numbers"></span>
+                <button id="next-page" disabled>Next</button>
+            </div>
+        </div>
+        <div>
+            <button id="create-jump" class="button">Create Jump</button>
+        </div>
+
+    </main>
+        
+        <footer>
+            <span>TODO: Footer to be added</span>
+        </footer>
+
+
 </div>
 <script type="module" src="js/main.js"></script>
 </body>

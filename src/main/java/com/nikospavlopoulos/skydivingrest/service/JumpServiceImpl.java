@@ -146,7 +146,14 @@ public class JumpServiceImpl implements IJumpService{
 
         Page<Jump> allJumps = jumpRepository.findAllByUserId(id, pageable);
 
-        return jumpMapper.jumpListToJumpLookupDTO(allJumps);
+        return allJumps.map(jump -> {
+            JumpLookupDTO jumpLookupDTO = jumpMapper.jumpToJumpLookupDTO(jump);
+            long jumpNumber = jumpRepository.countByUserIdAndIdLessThanEqual(jump.getUser().getId(), jump.getId());
+            jumpLookupDTO.setJumpNumber(jumpNumber);
+            return jumpLookupDTO;
+        });
+
+//        return jumpMapper.jumpListToJumpLookupDTO(allJumps);
     }
 
     @Override
