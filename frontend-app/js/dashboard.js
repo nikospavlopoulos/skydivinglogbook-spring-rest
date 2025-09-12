@@ -173,3 +173,5 @@ function getNestedValue(obj, path) {
     return path.split('.').reduce((o, key) => o && o[key], obj);
 }
 
+// TODO: For Edit/Delete Jumps https://chatgpt.com/s/t_68c408dc67688191b1ab6d00763c5e77
+// TODO: Make it start from the last page. "Most Recent Jump" - Probably adjust the backend. And sort 'desc'

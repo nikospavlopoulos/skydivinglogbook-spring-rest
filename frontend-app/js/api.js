@@ -1,4 +1,4 @@
-// src/main/resources/static/js/api.js
+// frontend-app/js/api.js
 
 /**
  * Fetch wrapper that attaches JWT from localStorage if available.

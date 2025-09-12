@@ -77,9 +77,11 @@ public class JumpServiceImpl implements IJumpService{
 
         // In case there is a failure during DB persist
         try {
+            System.out.println("DEBUG Jump before save: " + jump);
             Jump savedJump = jumpRepository.save(jump);
             return jumpMapper.jumpToJumpLookupDTO(savedJump);
         } catch (DataIntegrityViolationException ex) {
+//            ex.printStackTrace();
             throw new InternalServerException("Data Integrity - The Jump failed to save.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

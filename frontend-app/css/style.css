@@ -11,7 +11,7 @@ body {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 90%; /* Wider for dashboard */
+    width:max-content;  /* Wider for dashboard */
     max-width: 1000px; /* Cap for readability */
     margin: 20px auto; /* Center with margin */
 }
@@ -176,4 +176,36 @@ footer {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+}
+
+/* Jump Insert Form */
+.jump-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
 }
