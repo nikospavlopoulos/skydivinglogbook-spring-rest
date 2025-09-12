@@ -56,35 +56,35 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 - **Frontend**:
     - Open `frontend-app/` in a code editor like VS Code.
     - Use the Live Server extension to serve at `http://127.0.0.1:5500/index.html`.
-    - Pages currently include login (`index.html`), registration (`register.html`), dashboard (`dashboard.html` and jumps (`jumps.html`).
+    - Pages currently include login (`index.html`), registration (`register.html`), dashboard (`dashboard.html`) and jumps (`jumps.html`).
 
 ## API Endpoints
 
-Base URL: `http://localhost:8080/api`.
+Base URL: `http://localhost:8080`.
 
 - **Authentication**:
-    - POST `/auth/login`: Authenticate user and return JWT (body: `AuthenticationRequestDTO` with username/password).
-    - POST `/users`: Register user (body: `UserInsertDTO`).
+    - POST `/api/auth/login`: Authenticate user and return JWT (body: `AuthenticationRequestDTO` with username/password).
+    - POST `/api/users`: Register user (body: `UserInsertDTO`).
 
 - **Users**:
-    - GET `/users/{id}`: Get user details.
-    - PUT `/users/{id}`: Update user (body: `UserUpdateDTO`).
-    - PUT `/users/{id}/password`: Update password (body: `PasswordUpdateDTO`).
-    - DELETE `/users/{id}`: Delete user.
+    - GET `/api/users/{id}`: Get user details.
+    - PUT `/api/users/{id}`: Update user (body: `UserUpdateDTO`).
+    - PUT `/api/users/{id}/password`: Update password (body: `PasswordUpdateDTO`).
+    - DELETE `/api/users/{id}`: Delete user.
 
 - **Jumps**:
-    - GET `/jumps/all`: List all jumps for the user (with pagination and sorting).
-    - GET `/jumps/{id}`: Get specific jump.
-    - POST `/jumps`: Create jump (body: `JumpInsertDTO`).
-    - PUT `/jumps/{id}`: Update jump (body: `JumpUpdateDTO`).
-    - DELETE `/jumps/{id}`: Delete jump.
-    - GET `/jumps/search`: Search jumps with filters (query params for user, date range, jump type).
-    - GET `/jumps/totals`: Get aggregate stats (total jumps, freefall time).
+    - GET `/api/jumps/all`: List all jumps for the user (with pagination and sorting).
+    - GET `/api/jumps/{id}`: Get specific jump.
+    - POST `/api/jumps`: Create jump (body: `JumpInsertDTO`).
+    - PUT `/api/jumps/{id}`: Update jump (body: `JumpUpdateDTO`).
+    - DELETE `/api/jumps/{id}`: Delete jump.
+    - GET `/api/jumps/search`: Search jumps with filters (query params for user, date range, jump type).
+    - GET `/api/jumps/totals`: Get aggregate stats (total jumps, freefall time).
 
 - **Lookups**:
-    - GET `/lookups/aircraft`: List aircraft.
-    - GET `/lookups/dropzones`: List dropzones.
-    - GET `/lookups/jumptypes`: List jump types.
+    - GET `/api/lookups/aircraft`: List aircraft.
+    - GET `/api/lookups/dropzones`: List dropzones.
+    - GET `/api/lookups/jumptypes`: List jump types.
 
 Use of Postman for testing, with environments set up for authorization and JSON verification.
 
@@ -93,7 +93,7 @@ Use of Postman for testing, with environments set up for authorization and JSON 
 - `index.html`: Login form, submits to `/api/auth/login`, stores JWT in localStorage.
 - `register.html`: Registration form, submits to `/api/users`.
 - `dashboard.html`: Displays welcome message, stats cards (total jumps, freefall time), sortable/paginated jumps table, and "Create Jump" button/form. Fetches data from `/api/jumps/all`, `/api/lookups/*`.
-- `register.html`: Jump creation form, submits to `/api/jumps`.
+- `jumps.html`: Jump creation form, submits to `/api/jumps`.
 - JavaScript files handle API calls, form validation, JWT parsing, and UI updates.
 
 ## Testing and Coverage
