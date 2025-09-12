@@ -103,11 +103,10 @@ Tests cover repositories, services, controllers, security, DTO validation, and i
 
 - Coverage tool: JaCoCo.
 
-### JaCoCo report (12/09/2025):
+### JaCoCo & Gradle report (12/09/2025):
 
-
-![jacoco_test_report.png](otherfiles/jacoco_test_report.png)
-![gradle_test_report.png](otherfiles/gradle_test_report.png)
+![jacoco_test_report.png](misc/jacoco_test_report.png)
+![gradle_test_report.png](misc/gradle_test_report.png)
 
 
 ## Project Structure
