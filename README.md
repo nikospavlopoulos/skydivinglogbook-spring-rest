@@ -24,6 +24,13 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 - **Frontend**: Vanilla HTML, JavaScript, CSS.
 - **Other**: MapStruct for entity-DTO mapping, JPA specifications for queries, logging interceptor, Jackson for JSON serialization, CORS configuration.
 
+## Database Schema
+
+The database schema defines the relationships between users, jumps, aircraft, dropzones, and jump types.  
+This structure ensures data consistency and supports features like dynamic jump numbering, search filters, and aggregate statistics.
+
+![database_schema.png](misc/database_schema.png)
+
 ## Planned Milestones
 
 - Integrate Swagger/OpenAPI for API documentation.
