@@ -1,0 +1,89 @@
+<!-- frontend-app/jumps.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jumps</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/main.js"></script>
+
+</head>
+
+
+<body>
+
+  <header>
+    <h1>Add a New Jump</h1>
+  </header>
+
+    <section id="jumps-list">
+        <!-- Placeholder for jumps list (GET /api/jumps) -->
+    </section>
+
+<div class="container">
+
+  <main>
+        <form id="jump-form" class="jump-form">
+            <div class="form-group">
+                <label for="altitude">Altitude (ft):</label>
+                <input type="number" id="altitude" min="3000" max="20000" required>
+                <span id="altitude-error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="freeFallDuration">Free Fall Duration (s):</label>
+                <input type="number" id="freeFallDuration" min="0" max="100" required>
+                <span id="freeFallDuration-error" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="jumpDate">Jump Date:</label>
+                <input type="date" id="jumpDate" required>
+                <span id="jumpDate-error" class="error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="aircraftId">Aircraft:</label>
+                <select id="aircraftId" required>
+                    <option value="">Select Aircraft</option>
+                </select>
+                <span id="aircraftId-error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="dropzoneId">Dropzone:</label>
+                <select id="dropzoneId" required>
+                    <option value="">Select Dropzone</option>
+                </select>
+                <span id="dropzoneId-error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="jumptypeId">Jump Type:</label>
+                <select id="jumptypeId" required>
+                    <option value="">Select Jump Type</option>
+                </select>
+                <span id="jumptypeId-error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="jumpNotes">Notes:</label>
+                <textarea id="jumpNotes" maxlength="500"></textarea>
+                <span id="jumpNotes-error" class="error"></span>
+            </div>
+            <button type="submit">Add Jump</button>
+        </form>
+
+    <!-- Success/Error messages -->
+    <div id="message"></div>
+
+    <!-- Display newly added jump -->
+    <div id="new-jump"></div>
+
+    <!-- Navigation "Back to Dashboard" -->
+    <div class="link"><a href="dashboard.html">Back to Dashboard</a></div>
+
+  </main>
+
+
+</div>
+</body>
+</html>

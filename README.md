@@ -118,7 +118,7 @@ Tests cover repositories, services, controllers, security, DTO validation, and i
 ## Project Structure
 
 ```
-skydiving-logbook-api/
+skydivinglogbook-spring-rest/
 ├── frontend-app/                  # Standalone frontend application
 │   ├── css/                       # Stylesheets
 │   ├── js/                        # JavaScript files (e.g., main.js, login.js, dashboard.js)

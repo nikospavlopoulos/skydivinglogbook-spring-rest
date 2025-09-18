@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container" id="profile-container">
+    <h2>User Profile</h2>
+
+    <!-- Display user info -->
+    <form id="profile-form">
+        <input type="text" id="profile-username" placeholder="Username" disabled>
+        <input type="text" id="profile-firstname" placeholder="First Name">
+        <input type="text" id="profile-lastname" placeholder="Last Name">
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <!-- Update password -->
+    <form id="password-form">
+        <input type="password" id="profile-password" placeholder="New Password">
+        <input type="password" id="profile-confirm-password" placeholder="Confirm Password">
+        <button type="submit">Change Password</button>
+    </form>
+
+    <button id="delete-account">Delete Account</button>
+
+    <div id="profile-message" class="message"></div>
+    <div class="link"><a href="dashboard.html">Back to Dashboard</a></div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
