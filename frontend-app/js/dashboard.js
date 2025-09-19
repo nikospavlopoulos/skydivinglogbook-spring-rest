@@ -41,7 +41,7 @@ export async function loadDashboard() {
         totalPages = firstPage.totalPages;
         currentPage = 0;
 
-        // Fetch last page
+        // Fetch page
         await fetchPage(currentPage);
 
     } catch (err) {
@@ -71,12 +71,14 @@ function renderJumpsTable(jumps, page) {
     tbody.innerHTML = '';
     jumpsData = [...jumps];
 
-    // Client-side sort only for jumpNumber
+    // Client-side sort only for jumpNumber (redundant - TODO: test for removal)
+    
     if (sortColumn === 'jumpNumber') {
         jumpsData.sort((a, b) =>
             sortDirection === 'asc' ? a.jumpNumber - b.jumpNumber : b.jumpNumber - a.jumpNumber
         );
     }
+    
 
     jumpsData.forEach(jump => {
         const tr = document.createElement('tr');
@@ -84,7 +86,7 @@ function renderJumpsTable(jumps, page) {
             <td>${jump.jumpNumber}</td>
             <td>${jump.altitude}</td>
             <td>${jump.freeFallDuration}</td>
-            <td>${new Date(jump.jumpDate).toLocaleString('en-US', { dateStyle: 'short'})}</td>
+            <td>${new Date(jump.jumpDate).toLocaleString('el-GR', { dateStyle: 'short'})}</td>
             <td>${jump.jumpNotes || ''}</td>
             <td>${jump.aircraft.aircraftName}</td>
             <td>${jump.dropzone.dropzoneName}</td>
@@ -120,6 +122,18 @@ function renderJumpsTable(jumps, page) {
             }
         };
     });
+
+    // Reset Sorting Button
+    document.getElementById('reset-sorting').addEventListener('click', () => {
+    sortColumn = 'jumpNumber';
+    sortDirection = 'desc';
+    currentSort = 'jumpDate,desc';
+    currentPage = 0;
+
+    // Fetch first page again
+    fetchPage(currentPage);
+    });
+
 }
 
 // Fetch page with backend sort
