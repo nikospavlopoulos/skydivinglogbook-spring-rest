@@ -84,7 +84,7 @@ function renderJumpsTable(jumps, page) {
             <td>${jump.jumpNumber}</td>
             <td>${jump.altitude}</td>
             <td>${jump.freeFallDuration}</td>
-            <td>${new Date(jump.jumpDate).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}</td>
+            <td>${new Date(jump.jumpDate).toLocaleString('en-US', { dateStyle: 'short'})}</td>
             <td>${jump.jumpNotes || ''}</td>
             <td>${jump.aircraft.aircraftName}</td>
             <td>${jump.dropzone.dropzoneName}</td>
