@@ -28,8 +28,11 @@ public interface JumpRepository extends JpaRepository<Jump, Long>, JpaSpecificat
     // Search query Date
     Page<Jump> findJumpByUserIdAndJumptype(Long userId, Jumptype jumptype, Pageable pageable);
 
-    // Calculate Skydiver's jump's ordinal number
+    // Calculate Skydiver's jump's ordinal number (based on Id - bug regarding date calculation
     long countByUserIdAndIdLessThanEqual(Long userId, Long JumpIdIsLessThan);
+
+    // Calculate Skydiver's jump's ordinal number (correct, based on date)
+    long countByUserIdAndJumpDateLessThanEqual(Long userId, LocalDateTime jumpDateIsLessThan);
 
     // Calculate total freefall Time (seconds)
     /// Querydraft: SELECT SUM(jump.freefFallDuration) FROM jump WHERE user_id = ?;

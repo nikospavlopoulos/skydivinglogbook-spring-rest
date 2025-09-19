@@ -148,14 +148,23 @@ public class JumpServiceImpl implements IJumpService{
 
         Page<Jump> allJumps = jumpRepository.findAllByUserId(id, pageable);
 
+        // Calculate Skydiver's jump's ordinal number (correct, based on date)
+        return allJumps.map(jump -> {
+            JumpLookupDTO jumpLookupDTO = jumpMapper.jumpToJumpLookupDTO(jump);
+            long jumpNumber = jumpRepository.countByUserIdAndJumpDateLessThanEqual(jump.getUser().getId(), jump.getJumpDate());
+            jumpLookupDTO.setJumpNumber(jumpNumber);
+            return jumpLookupDTO;
+        });
+
+        /*     // Calculate Skydiver's jump's ordinal number (based on Id - bug regarding date calculation
+
         return allJumps.map(jump -> {
             JumpLookupDTO jumpLookupDTO = jumpMapper.jumpToJumpLookupDTO(jump);
             long jumpNumber = jumpRepository.countByUserIdAndIdLessThanEqual(jump.getUser().getId(), jump.getId());
             jumpLookupDTO.setJumpNumber(jumpNumber);
             return jumpLookupDTO;
         });
-
-//        return jumpMapper.jumpListToJumpLookupDTO(allJumps);
+         */
     }
 
     @Override
