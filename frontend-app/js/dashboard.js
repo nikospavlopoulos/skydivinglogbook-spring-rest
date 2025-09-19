@@ -2,109 +2,82 @@
 import { fetchWithAuth } from './api.js';
 import { parseJwt } from './jwt.js';
 
+// State
+let sortColumn = 'jumpNumber';
+let sortDirection = 'desc';
+let currentPage = 0;
+let currentSort = 'jumpDate,desc';
+let jumpsData = [];
+let totalPages = 0;
+
 export async function loadDashboard() {
     const container = document.getElementById('dashboard-container');
-    if (!container) {
-            console.error('Dashboard container not found');
-            return;
-        }
+    if (!container) return console.error('Dashboard container not found');
 
     const token = localStorage.getItem('jwtToken');
-    console.log('Token:', token ? 'Found' : 'Not found');
-
-    if (!token) {
-        console.log('No token, redirecting to index.html');
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!token) return redirectToLogin();
 
     const payload = parseJwt(token);
-    console.log('JWT Payload:', payload);
-    if (!payload || !payload.sub) {
-        console.log('Invalid payload or no username, clearing token and redirecting');
-        localStorage.removeItem('jwtToken');
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!payload || !payload.sub) return redirectToLogin();
 
-    const username = payload.sub; // extract username from JWT
-    console.log('Fetching user data for Username:', username);
-    const welcomeMessage = document.getElementById('welcome-message');
-    welcomeMessage.textContent = `Hello ${username}`;
+    const username = payload.sub;
+    document.getElementById('welcome-message').textContent = `Hello ${username}`;
 
-
-try {
-        // Fetch totals & Jump Table
-        const [totalJumpsRes, totalFreefallRes, jumpsRes] = await Promise.all([
+    try {
+        // Fetch totals
+        const [totalJumpsRes, totalFreefallRes] = await Promise.all([
             fetchWithAuth('http://localhost:8080/api/jumps/totaljumps', { method: 'GET' }),
-            fetchWithAuth('http://localhost:8080/api/jumps/totalfreefall', { method: 'GET' }),
-            fetchWithAuth('http://localhost:8080/api/jumps/all?page=0&size=10', { method: 'GET' })
+            fetchWithAuth('http://localhost:8080/api/jumps/totalfreefall', { method: 'GET' })
         ]);
 
-        // Handle totals
-        if (totalJumpsRes.ok) {
-            const totalJumps = await totalJumpsRes.json();
-            document.getElementById('total-jumps').textContent = totalJumps;
-        } else {
-            document.getElementById('total-jumps').textContent = 'Error loading jumps';
-        }
+        document.getElementById('total-jumps').textContent = totalJumpsRes.ok ? await totalJumpsRes.json() : 'Error loading jumps';
+        document.getElementById('total-freefall').textContent = totalFreefallRes.ok ? await totalFreefallRes.text() : 'Error loading freefall';
 
-        if (totalFreefallRes.ok) {
-            const totalFreefall = await totalFreefallRes.text();
-            document.getElementById('total-freefall').textContent = totalFreefall;
-        } else {
-            document.getElementById('total-freefall').textContent = 'Error loading freefall';
-        }
+        // Fetch first page just to determine totalPages
+        const firstPageRes = await fetchWithAuth(`http://localhost:8080/api/jumps/all?page=0&size=10&sort=${currentSort}`, { method: 'GET' });
+        if (!firstPageRes.ok) return handleUnauthorized();
 
-        // Handle jumps table
-        if (jumpsRes.ok) {
-            const data = await jumpsRes.json();
-            console.log('Jumps data:', data);
-            renderJumpsTable(data.content, data.number, data.totalPages);
-        } else {
-            console.error('Jumps fetch failed:', jumpsRes.status);
-            document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Unauthorized. Please login again.</td></tr>';
-            localStorage.removeItem('jwtToken');
-            setTimeout(() => window.location.href = 'index.html', 2000);
-            return;
-        }
+        const firstPage = await firstPageRes.json();
+        totalPages = firstPage.totalPages;
+        currentPage = 0;
+
+        // Fetch last page
+        await fetchPage(currentPage);
+
     } catch (err) {
         console.error('Fetch error:', err);
         document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Network error.</td></tr>';
     }
 
-    // Create Jump button
     document.getElementById('create-jump').addEventListener('click', () => {
         window.location.href = 'jumps.html';
     });
-
 }
 
-// State for sorting
-let sortColumn = 'jumpNumber';
-let sortDirection = 'asc';
-let currentPage = 0;
-let jumpsData = [];
+function redirectToLogin() {
+    localStorage.removeItem('jwtToken');
+    window.location.href = 'index.html';
+}
 
-function renderJumpsTable(jumps, page, totalPages) {
+function handleUnauthorized() {
+    document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Unauthorized. Please login again.</td></tr>';
+    localStorage.removeItem('jwtToken');
+    setTimeout(() => (window.location.href = 'index.html'), 2000);
+}
+
+// Render function (same corrected version)
+function renderJumpsTable(jumps, page) {
     const tbody = document.getElementById('jumps-table-body');
     tbody.innerHTML = '';
-
-    // Sort jumps
     jumpsData = [...jumps];
-    jumpsData.sort((a, b) => {
-        let valueA = getNestedValue(a, sortColumn);
-        let valueB = getNestedValue(b, sortColumn);
-        if (sortColumn === 'jumpDate') {
-            valueA = new Date(valueA).getTime();
-            valueB = new Date(valueB).getTime();
-        }
-        if (typeof valueA === 'string') valueA = valueA.toLowerCase();
-        if (typeof valueB === 'string') valueB = valueB.toLowerCase();
-        return sortDirection === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
-    });
 
-    // Render table rows
+    // Client-side sort only for jumpNumber
+    if (sortColumn === 'jumpNumber') {
+        jumpsData.sort((a, b) =>
+            sortDirection === 'asc' ? a.jumpNumber - b.jumpNumber : b.jumpNumber - a.jumpNumber
+        );
+    }
+
     jumpsData.forEach(jump => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -124,41 +97,40 @@ function renderJumpsTable(jumps, page, totalPages) {
         tbody.appendChild(tr);
     });
 
-    // Pagination controls
-    const prevButton = document.getElementById('prev-page');
-    const nextButton = document.getElementById('next-page');
-    const pageNumbers = document.getElementById('page-numbers');
+    // Pagination
+    document.getElementById('prev-page').disabled = page === 0;
+    document.getElementById('next-page').disabled = page >= totalPages - 1;
+    document.getElementById('page-numbers').textContent = `Page ${page + 1} of ${totalPages}`;
+    document.getElementById('prev-page').onclick = () => fetchPage(page - 1);
+    document.getElementById('next-page').onclick = () => fetchPage(page + 1);
 
-    prevButton.disabled = page === 0;
-    nextButton.disabled = page >= totalPages - 1;
-    pageNumbers.textContent = `Page ${page + 1} of ${totalPages}`;
-
-    prevButton.onclick = () => fetchPage(page - 1);
-    nextButton.onclick = () => fetchPage(page + 1);
-
-    // Sorting event listeners
+    // Sorting headers
     document.querySelectorAll('#jumps-table th[data-sort]').forEach(th => {
         th.style.cursor = 'pointer';
         th.onclick = () => {
             const column = th.getAttribute('data-sort');
-            if (column === sortColumn) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            if (column === sortColumn) sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            else { sortColumn = column; sortDirection = 'asc'; }
+
+            if (column === 'jumpNumber') {
+                renderJumpsTable(jumpsData, page);
             } else {
-                sortColumn = column;
-                sortDirection = 'asc';
+                currentSort = `${column},${sortDirection}`;
+                fetchPage(currentPage);
             }
-            renderJumpsTable(jumpsData, page, totalPages);
         };
     });
 }
 
+// Fetch page with backend sort
 async function fetchPage(page) {
     try {
-        const response = await fetchWithAuth(`http://localhost:8080/api/jumps/all?page=${page}&size=10`, { method: 'GET' });
+        const response = await fetchWithAuth(`http://localhost:8080/api/jumps/all?page=${page}&size=10&sort=${currentSort}`, { method: 'GET' });
         if (response.ok) {
             const data = await response.json();
             currentPage = page;
-            renderJumpsTable(data.content, data.number, data.totalPages);
+            totalPages = data.totalPages;
+            renderJumpsTable(data.content, page);
         } else {
             console.error('Page fetch failed:', response.status);
             document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Error loading page.</td></tr>';
@@ -168,10 +140,3 @@ async function fetchPage(page) {
         document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Network error.</td></tr>';
     }
 }
-
-function getNestedValue(obj, path) {
-    return path.split('.').reduce((o, key) => o && o[key], obj);
-}
-
-// TODO: For Edit/Delete Jumps https://chatgpt.com/s/t_68c408dc67688191b1ab6d00763c5e77
-// TODO: Make it start from the last page. "Most Recent Jump" - Probably adjust the backend. And sort 'desc'
