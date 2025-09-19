@@ -27,35 +27,3 @@ export async function fetchWithAuth(url, options = {}) {
 
     return fetch(url, fetchOptions);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-export async function fetchWithAuth(url, options = {}) {
-    const token = localStorage.getItem('jwtToken');
-
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(options.headers || {})
-    };
-
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const response = await fetch(url, { ...options, headers });
-    return response;
-}
-
-*/

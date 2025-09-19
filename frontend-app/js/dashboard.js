@@ -1,5 +1,6 @@
 // src/main/resources/static/js/dashboard.js
 import { fetchWithAuth } from './api.js';
+import { loadJumps } from './jumps.js';
 import { parseJwt } from './jwt.js';
 
 // State
@@ -71,7 +72,7 @@ function renderJumpsTable(jumps, page) {
     tbody.innerHTML = '';
     jumpsData = [...jumps];
 
-    // Client-side sort only for jumpNumber (redundant - TODO: test for removal)
+    // Client-side sort only for jumpNumber
     
     if (sortColumn === 'jumpNumber') {
         jumpsData.sort((a, b) =>
@@ -92,11 +93,16 @@ function renderJumpsTable(jumps, page) {
             <td>${jump.dropzone.dropzoneName}</td>
             <td>${jump.jumptype.jumptypeName}</td>
             <td>
-                <a href="jumps.html?edit=${jump.id}">Edit</a> |
-                <a href="jumps.html?delete=${jump.id}" class="delete-jump">Delete</a>
+                <a class="edit-btn" data-jump-id="${jump.id}">Edit</a> |
+                <a class="delete-btn" data-jump-id="${jump.id}">Delete</a>
             </td>
         `;
         tbody.appendChild(tr);
+    });
+
+    // Attach even listener to delete buttons
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleDelete(btn.dataset.jumpId))
     });
 
     // Pagination
@@ -136,6 +142,35 @@ function renderJumpsTable(jumps, page) {
 
 }
 
+// Handle delete action for a jump
+async function handleDelete(jumpId) {
+    const confirmDelete = confirm (`🪂 Are you sure you want to delete jump with database id #${jumpId}?`);
+
+    if(!confirmDelete) {
+        return // user cancelled
+    }
+
+
+    try {
+        const response = await fetchWithAuth(`http://localhost:8080/api/jumps/${jumpId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete jump');
+        }
+
+        //Refresh Jump list
+        alert('✅ Jump deleted successfully!');
+        await loadDashboard();
+    } catch (error) {
+        console.error('Error deleting jump: ', error);
+        alert('❌ Could not delete jump. Please try again.');
+    }
+}
+
+
+
 // Fetch page with backend sort
 async function fetchPage(page) {
     try {
@@ -154,3 +189,4 @@ async function fetchPage(page) {
         document.getElementById('jumps-table-body').innerHTML = '<tr><td colspan="9">Network error.</td></tr>';
     }
 }
+
