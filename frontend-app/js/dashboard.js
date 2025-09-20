@@ -1,6 +1,5 @@
 // src/main/resources/static/js/dashboard.js
 import { fetchWithAuth } from './api.js';
-import { loadJumps } from './jumps.js';
 import { parseJwt } from './jwt.js';
 
 // State
@@ -105,6 +104,11 @@ function renderJumpsTable(jumps, page) {
         btn.addEventListener('click', () => handleDelete(btn.dataset.jumpId))
     });
 
+    // Attach even listener to edit buttons
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleEdit(btn.dataset.jumpId))
+    });
+
     // Pagination
     document.getElementById('prev-page').disabled = page === 0;
     document.getElementById('next-page').disabled = page >= totalPages - 1;
@@ -169,6 +173,11 @@ async function handleDelete(jumpId) {
     }
 }
 
+
+// Handle edit action for a jump
+async function handleEdit(jumpId) {
+    window.location.href = `jumps.html?edit=${jumpId}`;
+}
 
 
 // Fetch page with backend sort
