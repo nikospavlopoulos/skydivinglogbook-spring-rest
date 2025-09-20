@@ -1,12 +1,84 @@
 import { fetchWithAuth } from './api.js';
 
-export async function loadJumps() {
-    const jumpForm = document.getElementById('jump-form');
-    const messageDiv = document.getElementById('message');
-    const createdJumpDiv = document.getElementById('new-jump');
+// Detect edit mode vs create mode
+const urlParams = new URLSearchParams(window.location.search);
+const editId = urlParams.get('edit');
+
+if (editId) {
+    console.log(`Edit mode detected for jump with DB id: ${editId}`);
+    loadJumpForEdit(editId);
+} else {
+    console.log('Create mode detected (Create New Jump)')
+}
+
+// Edit mode: Load Existing Jump data (prefill form)
+async function loadJumpForEdit(jumpId) {
+    await loadLookups();
+
+    try {
+        const response = await fetchWithAuth(`http://localhost:8080/api/jumps/${jumpId}`);
+
+        const jump = await response.json();
+        
+
+        // Prefill form fields
+        document.getElementById('altitude').value = jump.altitude;
+        document.getElementById('freeFallDuration').value = jump.freeFallDuration;
+        document.getElementById('jumpDate').value = jump.jumpDate.split('T')[0]; //retrieve only date, not time
+        document.getElementById('aircraftId').value = jump.aircraft.id;
+        document.getElementById('dropzoneId').value = jump.dropzone.id;
+        document.getElementById('jumptypeId').value = jump.jumptype.id; 
+        document.getElementById('jumpNotes').value = jump.jumpNotes;
+
+        // Change page header to Edit Jump
+        document.querySelector('header h1').textContent =  `Edit Jump with DB id #${jumpId}`;
+
+        // Change button text to 'Update'
+        document.querySelector('#jump-form button[type="submit"]').textContent = 'Update Jump'
+    } catch (error) {
+        console.error('Error loading the jump for edit: ', error);
+        alert ('❌ Could not load jump details for editing.');
+    }
+}
+
+// Edit mode: send Put `api/jumps/${editId}` to Update jump
+async function putUpdateJump(editId) {
+
+    try {
+        // Serialize form to JumpUpdateDTO
+        const jumpData = {
+            altitude: parseInt(document.getElementById('altitude').value),
+            freeFallDuration: parseInt(document.getElementById('freeFallDuration').value),
+            jumpDate: document.getElementById('jumpDate').value + 'T00:00:00',
+            jumpNotes: document.getElementById('jumpNotes').value || null,
+            aircraftId: parseInt(document.getElementById('aircraftId').value),
+            dropzoneId: parseInt(document.getElementById('dropzoneId').value),
+            jumptypeId: parseInt(document.getElementById('jumptypeId').value)
+        }; 
+        
+        const response = await fetchWithAuth(`http://localhost:8080/api/jumps/${editId}`, {
+            method: 'PUT',
+            body: JSON.stringify(jumpData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP ${response.status}`);
+        }
+
+        // Redirect to dashboard with success alert
+        alert('✅ Jump updated successfully!');        
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        console.error('Error updating jump: ', error);
+        alert ('❌ Could not update jump:' + error.message);
+
+    }
+
+}
 
     // Fetch lookup data for dropdowns
-    async function loadLookups() {
+export async function loadLookups() {
         try {
             const [dropzoneRes, aircraftRes, jumptypeRes] = await Promise.all([
                 fetchWithAuth('http://localhost:8080/api/lookups/dropzones'),
@@ -25,6 +97,7 @@ export async function loadJumps() {
 
             // Populate dropdowns
             const dropzoneSelect = document.getElementById('dropzoneId');
+            dropzoneSelect.innerHTML = '<option value="">Select Dropzone</option>'; // reset to avoid duplicates
             dropzones.forEach(dz => {
                 const option = document.createElement('option');
                 option.value = dz.id;
@@ -33,6 +106,7 @@ export async function loadJumps() {
             });
 
             const aircraftSelect = document.getElementById('aircraftId');
+            aircraftSelect.innerHTML = '<option value="">Select Aircraft</option>'; // reset to avoid duplicates
             aircraft.forEach(ac => {
                 const option = document.createElement('option');
                 option.value = ac.id;
@@ -41,6 +115,7 @@ export async function loadJumps() {
             });
 
             const jumptypeSelect = document.getElementById('jumptypeId');
+            jumptypeSelect.innerHTML = '<option value="">Select Jumptype</option>'; // reset to avoid duplicates
             jumptypes.forEach(jt => {
                 const option = document.createElement('option');
                 option.value = jt.id;
@@ -54,6 +129,11 @@ export async function loadJumps() {
         }
     }
 
+export async function loadJumps() {
+    const jumpForm = document.getElementById('jump-form');
+    const messageDiv = document.getElementById('message');
+    const createdJumpDiv = document.getElementById('new-jump');
+   
     // Client-side validation
     function validateField(field, value) {
         const errors = {
@@ -120,6 +200,12 @@ export async function loadJumps() {
             return;
         }
 
+        //// --- INSERT HERE THE UPDATE JUMP --- ///
+        if (editId) {
+            await putUpdateJump(editId);
+            return; // stop any further actions
+        }
+
         // Serialize form to JumpInsertDTO
         const jumpData = {
             altitude: parseInt(document.getElementById('altitude').value),
@@ -152,6 +238,10 @@ export async function loadJumps() {
                 return res.json();
             });
 
+            // Alert Success
+            alert('✅ Jump Created successfully!');        
+
+
             // Display created jump
             createdJumpDiv.innerHTML = `
                 <h3>Created Jump #${jumpDetails.jumpNumber}</h3>
@@ -174,7 +264,7 @@ export async function loadJumps() {
         }
     });
 
-    // Load dropdowns
-    await loadLookups();
 
+// Load dropdowns
+await loadLookups(); 
 }

@@ -3,24 +3,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Login</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=paragliding" />
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container-fluid px-md-5">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold text-primary nav_position fs-3" href="#">
+            <span class="material-symbols-outlined fs-3">paragliding</span>
+            Skydiving Logbook
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav gap-2 ms-auto text-center" id="nav-links">
+                <!-- TODO: Add JS script to hide links when not authenticated -->
+                <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fa-solid fa-chart-line me-1"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="jumps.html"><i class="fa-solid fa-plane me-1"></i> Create Jump</a></li>
+            </ul>
+        </div>
+        
+    </div>
+</nav>
+
 <div class="container">
-    <h2>Login</h2>
-
-    <form id="login-form">
-        <input type="email" id="login-username" placeholder="Username" required>
-        <input type="password" id="login-password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-
-    <div id="login-message" class="message"></div>
-    <div class="link">
-        <a href="register.html">Don't have an account? Register</a>
+    <div class="container-fluid d-flex align-items-center justify-content-center">
+        <div class="row w-100">
+            <!-- Left card -->
+            <div class="col-md-6 d-none d-md-flex bg-primary text-white align-items-end justify-content-center left-card">
+                <div class="text-center">
+                    <h3>Welcome Back Skydiver!</h3>
+                    <p><strong> Track your jumps, progress, <br> and your adventures.</strong></p>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+                <div class="card shadow-lg p-4 w-100" style="max-width: 400px;">
+                    <h3 class="mb-3 text-center"><i class="fa-solid fa-user me-2"></i>Login</h3>
+                    <form id="login-form">
+                        <div class="mb-1">
+                            <label for="login-username" class="form-label">Username</label>
+                            <input type="text" id="login-username" name="username" class="form-control" required>
+                        </div>
+                    <div class="mb-1">
+                        <label for="login-password" class="form-label">Password</label>
+                        <input type="password" id="login-password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i> Login
+                    </button>
+                    </form>
+                <div id="login-message" class="message mt-2 text-center"></div>
+                    <div class="mt-3 text-center">
+                    <small>Don't have an account? <a href="register.html">Register</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
 <script type="module" src="js/main.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<footer>
+    <span>Backend and UI Created By <a href="https://nikospavlopoulos.com" target="_blank">Nikos Pavlopoulos</a></span>        
+</footer>
+
 </body>
 </html>

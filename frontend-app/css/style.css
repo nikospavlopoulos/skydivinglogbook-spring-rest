@@ -1,6 +1,52 @@
+/* Theme variables */
+:root {
+  --primary: #0EA5E9;       /* Sky blue */
+  --primary-600: #0284C7;   /* Darker sky */
+  --accent: #ffffff;        /* White */
+  --muted: #F1F9FF;         /* Very light blue */
+  --surface: #E6F7FF;       /* Card background */
+  --danger: #E02424;        /* Red for errors */
+  --text: #0B1724;          /* Deep navy for text */
+}
+
+body {
+  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  background-color: var(--muted);
+  min-height: 100vh; /* Allow scrolling for dashboard */
+
+}
+
+/* Navbar custom */
+.nav-link {
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #0d6efd; 
+}
+
+
+/* Card Cooper Image */
+.left-card {
+    background: url('cooper.png') no-repeat center center;
+    background-size: cover;
+    border-radius: 2%;
+}
+
+.left-card-register {
+    background: url('cooper49.png') no-repeat center center;
+    background-size: cover;
+    border-radius: 2%;
+}
+
+/* Register Container Override */
+
+
 /* Existing styles */
 header {
-    position: sticky;
+    position:relative ;
     top: 0;            
     background-color: white;
     z-index: 100;      
@@ -8,12 +54,12 @@ header {
     padding: 10px 0; 
 }
 
-body {
-    font-family: Arial, sans-serif;
+/* body {
+    font-family: 'Inter', Arial, sans-serif;
     background-color: #f4f6f8;
     margin: 0;
-    min-height: 100vh; /* Allow scrolling for dashboard */
-}
+    min-height: 100vh;
+} */
 
 .container {
     background-color: white;
