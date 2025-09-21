@@ -20,8 +20,8 @@ export async function loadDashboard() {
     const payload = parseJwt(token);
     if (!payload || !payload.sub) return redirectToLogin();
 
-    const username = payload.sub;
-    document.getElementById('welcome-message').textContent = `Hello ${username}`;
+    // const username = payload.sub;
+    // document.getElementById('welcome-message').textContent = `Hello ${username}`;
 
     try {
         // Fetch totals
@@ -83,21 +83,22 @@ function renderJumpsTable(jumps, page) {
     jumpsData.forEach(jump => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${jump.jumpNumber}</td>
-            <td>${jump.altitude}</td>
-            <td>${jump.freeFallDuration}</td>
-            <td>${new Date(jump.jumpDate).toLocaleString('el-GR', { dateStyle: 'short'})}</td>
-            <td>${jump.jumpNotes || ''}</td>
-            <td>${jump.aircraft.aircraftName}</td>
-            <td>${jump.dropzone.dropzoneName}</td>
-            <td>${jump.jumptype.jumptypeName}</td>
-            <td>
-                <a class="edit-btn" data-jump-id="${jump.id}">Edit</a> |
-                <a class="delete-btn" data-jump-id="${jump.id}">Delete</a>
+            <td data-label="Jump Num."><span class="cell-value">${jump.jumpNumber}</span></td>
+            <td data-label="Altitude"><span class="cell-value">${jump.altitude}</span></td>
+            <td data-label="Free Fall"><span class="cell-value">${jump.freeFallDuration}</span></td>
+            <td data-label="Jump Date"><span class="cell-value">${new Date(jump.jumpDate).toLocaleString('el-GR', { dateStyle: 'short'})}</span></td>
+            <td data-label="Notes"><span class="cell-value">${jump.jumpNotes || ''}</span></td>
+            <td data-label="Aircraft"><span class="cell-value">${jump.aircraft.aircraftName}</span></td>
+            <td data-label="Dropzone"><span class="cell-value">${jump.dropzone.dropzoneName}</span></td>
+            <td data-label="Jump Type"><span class="cell-value">${jump.jumptype.jumptypeName}</span></td>
+            <td class="justify-content-between align-items-center h-100">
+                <a class="edit-btn text-primary" data-jump-id="${jump.id}" title="Edit"><i class="fa-solid fa-pen-to-square fs-5"></i></a>
+                <a class="delete-btn text-danger" data-jump-id="${jump.id}" title="Delete"><i class="fa-solid fa-trash fs-5"></i></a>
             </td>
         `;
         tbody.appendChild(tr);
     });
+
 
     // Attach even listener to delete buttons
     document.querySelectorAll('.delete-btn').forEach(btn => {

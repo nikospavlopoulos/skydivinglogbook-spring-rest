@@ -31,7 +31,7 @@ async function loadJumpForEdit(jumpId) {
         document.getElementById('jumpNotes').value = jump.jumpNotes;
 
         // Change page header to Edit Jump
-        document.querySelector('header h1').textContent =  `Edit Jump with DB id #${jumpId}`;
+        document.querySelector('#header').textContent =  `Edit Jump with DB id #${jumpId}`;
 
         // Change button text to 'Update'
         document.querySelector('#jump-form button[type="submit"]').textContent = 'Update Jump'

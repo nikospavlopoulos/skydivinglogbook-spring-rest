@@ -55,74 +55,89 @@
     </div>
 </nav>
 
-  <header>
-    <h1>Add a New Jump</h1>
-  </header>
+
 
     <section id="jumps-list">
         <!-- Placeholder for jumps list (GET /api/jumps) -->
     </section>
 
 <div class="container">
+    <div class="d-flex justify-content-center align-items-center my-5">
+        <div class="card shadow-lg p-4 w-100" style="max-width: 500px;">
+            <h3 id="header" class="mb-3 text-center">
+                <i class="fa-solid fa-plane me-2"></i> Add New Jump
+            </h3>
 
-  <main>
-        <form id="jump-form" class="jump-form">
-            <div class="form-group">
-                <label for="altitude">Altitude (ft):</label>
-                <input type="number" id="altitude" min="3000" max="20000" required>
-                <span id="altitude-error" class="error"></span>
-            </div>
-            <div class="form-group">
-                <label for="freeFallDuration">Free Fall Duration (s):</label>
-                <input type="number" id="freeFallDuration" min="0" max="100" required>
-                <span id="freeFallDuration-error" class="error"></span>
-            </div>
-            
-            <div class="form-group">
-                <label for="jumpDate">Jump Date:</label>
-                <input type="date" id="jumpDate" required>
-                <span id="jumpDate-error" class="error"></span>
-            </div>
+            <form id="jump-form" class="d-flex flex-column gap-3">
 
-            <div class="form-group">
-                <label for="aircraftId">Aircraft:</label>
-                <select id="aircraftId" required>
+            <div class="mb-1">
+                <label for="altitude" class="form-label">Altitude (ft):</label>
+                <input type="number" id="altitude" class="form-control" min="3000" max="20000" required>
+                <span id="altitude-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-1">
+                <label for="freeFallDuration" class="form-label">Free Fall Duration (s):</label>
+                <input type="number" id="freeFallDuration" class="form-control" min="0" max="100" required>
+                <span id="freeFallDuration-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-1">
+                <label for="jumpDate" class="form-label">Jump Date:</label>
+                <input type="date" id="jumpDate" class="form-control" required>
+                <span id="jumpDate-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-1">
+                <label for="aircraftId" class="form-label">Aircraft:</label>
+                <select id="aircraftId" class="form-select" required>
                     <option value="">Select Aircraft</option>
                 </select>
-                <span id="aircraftId-error" class="error"></span>
-            </div>
-            <div class="form-group">
-                <label for="dropzoneId">Dropzone:</label>
-                <select id="dropzoneId" required>
+                <span id="aircraftId-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-1">
+                <label for="dropzoneId" class="form-label">Dropzone:</label>
+                <select id="dropzoneId" class="form-select" required>
                     <option value="">Select Dropzone</option>
                 </select>
-                <span id="dropzoneId-error" class="error"></span>
-            </div>
-            <div class="form-group">
-                <label for="jumptypeId">Jump Type:</label>
-                <select id="jumptypeId" required>
+                <span id="dropzoneId-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-1">
+                <label for="jumptypeId" class="form-label">Jump Type:</label>
+                <select id="jumptypeId" class="form-select" required>
                     <option value="">Select Jump Type</option>
                 </select>
-                <span id="jumptypeId-error" class="error"></span>
+                <span id="jumptypeId-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                <label for="jumpNotes" class="form-label">Notes:</label>
+                <textarea id="jumpNotes" class="form-control" maxlength="500"></textarea>
+                <span id="jumpNotes-error" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                <i class="fa-solid fa-plus me-1"></i> Add Jump
+                </button>
+            </form>
+
+            <!-- Success/Error messages -->
+            <div id="message" class="mt-2 text-center"></div>
+
+            <!-- Display newly added jump -->
+            <div id="new-jump" class="mt-3"></div>
+
+            <!-- Back to Dashboard -->
+            <div class="mt-3 text-center">
+                <a href="dashboard.html">Back to Dashboard</a>
             </div>
-            <div class="form-group">
-                <label for="jumpNotes">Notes:</label>
-                <textarea id="jumpNotes" maxlength="500"></textarea>
-                <span id="jumpNotes-error" class="error"></span>
-            </div>
-            <button type="submit">Add Jump</button>
-        </form>
+        </div>
+    </div>
+</div>
 
-    <!-- Success/Error messages -->
-    <div id="message"></div>
-
-    <!-- Display newly added jump -->
-    <div id="new-jump"></div>
-
-    <!-- Navigation "Back to Dashboard" -->
-    <div class="link"><a href="dashboard.html">Back to Dashboard</a></div>
-
-  </main>
+</main>
 
 
 
@@ -133,7 +148,7 @@
 
 
 
-<footer>
+<footer class="text-center mt-4">
     <span>Backend and UI Created By <a href="https://nikospavlopoulos.com" target="_blank">Nikos Pavlopoulos</a></span>        
 </footer>
 </body>
