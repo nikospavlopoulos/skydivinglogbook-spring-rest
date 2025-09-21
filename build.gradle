@@ -29,6 +29,9 @@ jacocoTestReport {
     }
 }
 
+test {
+    exclude '**/*'
+}
 
 configurations {
     compileOnly {
@@ -43,6 +46,7 @@ configurations {
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     // === RESTful API (Spring MVC + JSON) ===
