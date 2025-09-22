@@ -1,6 +1,46 @@
 # Skydiving Logbook REST API
 
-A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`. The core work of the backend is complete, while the frontend is a work in progress.
+A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`.
+
+## Video Demo
+
+### For the [Video Demo click here](https://youtu.be/ddpZyq2-30Q?si=0WPRMsWgoW6kFFLE), or click on the gif below
+
+[![demo.gif](misc/demo.gif)](https://youtu.be/ddpZyq2-30Q?si=0WPRMsWgoW6kFFLE)
+
+## Table of Contents
+
+1. [Skydiving Logbook REST API](#skydiving-logbook-rest-api)
+2. [Goals & Scope](#goals--scope)
+3. [TL;DR / What this repo contains](#tldr--what-this-repo-contains)
+4. [Features](#features)
+5. [Tech Stack](#tech-stack)
+6. [Database Schema](#database-schema)
+7. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
+8. [Roadmap & Future TODOs](#roadmap--future-todos)
+9. [Installation](#installation)
+    - [Serving options (recommended)](#serving-options-recommended)
+    - [Backend Quickstart](#backend-quickstart)
+    - [Frontend (recommended)](#frontend-recommended)
+10. [API Endpoints](#api-endpoints)
+11. [Frontend Overview](#frontend-overview)
+12. [Testing and Coverage](#testing-and-coverage)
+13. [Project Structure](#project-structure)
+14. [License](#license)
+
+## Goals & Scope
+
+* **Core REST API**: Provide a robust and well-structured REST API for managing a personal skydiving logbook (users, jumps, and related stats).
+* **Demo Frontend**: Include a lightweight frontend for manual testing, demoing flows, and serving as a reference for API consumption.
+* **Code Quality**: Emphasize clean DTOs, clear separation of concerns, maintainable architecture, and strong test coverage.
+* **Extensibility**: Design the backend so it can support future clients such as a SPA (React/Angular) and a native Android app.
+* **Deployment Readiness**: Keep the project ready for containerization (Docker), cloud deployment, and integration with documentation tools (Swagger/OpenAPI).
+
+## TL;DR / What this repo contains
+
+* Backend: Java 21 + Spring Boot (REST API). Business logic lives under `src/main/java/com/nikospavlopoulos/skydivingrest`.
+* Frontend: simple vanilla HTML/JS in `frontend-app/` used for manual demos (login, register, dashboard, jump creation). Styled and customized using Bootstrap framework and CSS.
+* DB initialization scripts: `src/main/resources/sql/` (H2 and MySQL flavors). Use these to seed static lookup data and example jumps.
 
 ## Features
 
@@ -19,9 +59,10 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 - **Backend**: Java 21, Spring Boot, Spring Data JPA, Hibernate, Spring Security, JWT.
 - **Build Tool**: Gradle (dependencies include spring-boot-starter-web, spring-boot-starter-data-jpa, spring-boot-starter-security, mysql-connector-java, h2-database, jjwt, lombok, mapstruct).
 - **Database**: MySQL (development), H2 (testing).
-- **Security**: Spring Security with JWT authentication (custom filter, service, entry point).
+- **Security**: Spring Security with JWT-based stateless authentication.
 - **Testing**: Spring Boot Integration Tests, JUnit 5, Mockito, JaCoCo for coverage.
-- **Frontend**: Vanilla HTML, JavaScript, CSS.
+- **Frontend**: HTML, JavaScript. Styling/customization with Bootstrap and CSS.
+- **SQL**: seed scripts for H2 and MySQL in `src/main/resources/sql/`. (separate scripts to cover slight syntactic differences)
 - **Other**: MapStruct for entity-DTO mapping, JPA specifications for queries, logging interceptor, Jackson for JSON serialization, CORS configuration.
 
 ## Database Schema
@@ -31,39 +72,62 @@ This structure ensures data consistency and supports features like dynamic jump 
 
 ![database_schema.png](misc/database_schema.png)
 
-## Planned Milestones
 
-- Integrate Swagger/OpenAPI for API documentation.
-- Add Docker support for containerization and deployment.
+## Design decisions & trade-offs
+
+* **JWT for stateless authentication** : Chosen for simplicity and because the API is REST-first. Trade-offs: No server-side session invalidation.
+
+* **MapStruct for DTO mapping** : Compile-time mapping reduces boilerplate and keeps service code clean. Trade-offs: Slightly steeper learning curve and handling mapping nulls/updates.
+
+* **JPA Specifications for search** : Flexible multi-criteria queries without a separate query DSL. Trade-offs: longer code to build specs, more unit tests required to validate query behavior and edge-case ordering.
+
+* **Separate static frontend** : Kept the frontend as a small standalone folder (`frontend-app/`) instead of packaging it into Spring Boot so the frontend can be iterated independently. Tradeoffs: extra steps to serve frontend from a different server.
+
+## Roadmap & future TODOs
+
+1. **Swagger/OpenAPI**: integrate automatic API documentaion and example requests & responses for each endpoint.
+2. **Docker**: create a `Dockerfile` for containerization and easy deployment to different environments (local, staging, production).
+3. **Enhanced Frontend**: Transition to a modern Single Page Application (SPA) using React or Angular.
+4. **Android App**: Build a native Android application that consumes the existing REST API, with offline mode with local storage.
 
 ## Installation
+
+#### Serving options (recommended)
+
+1. **Embedded Tomcat (Spring Boot `bootRun`)** : easiest. Just run via a linux Terminal (or equivalent bash terminal in Windows).
+2. **IntelliJ Ultimate + Tomcat** : convenient if you prefer the IDE-managed Tomcat deployment and want to debug in place.
+
+#### Backend Quickstart
+
 
 1. Clone the repository:
    ```
    git clone https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git
    ```
 
-2. Set up the database:
+2. Use H2 profile(`spring.profiles.active=test
+` in `application.properties`) for zero-friction: the H2 scripts in `src/main/resources/sql/H2/` provide static lookup data and optional `randomjumps.sql`.
+
+   - Use H2 console: `http://localhost:8080/h2-console` (for running the SQL scripts).
+
+
+
+- Alternative: Set up the MySQL database:
     - For development: Install MySQL, create a database (e.g., skydivingdb), update `application.properties` or `application-dev.properties` with credentials (e.g., `spring.datasource.url=jdbc:mysql://localhost:3306/skydivingdb`).
-    - For testing: H2 is in-memory, no setup needed.
     - Run initialization scripts from `src/main/resources/sql` to populate static data (aircraft, dropzones, jump types) and optional test jumps.
 
 3. Build the backend & Run the application:
    ```
    ./gradlew build && ./gradlew bootRun
    ```
+   
+4. Embedded Tomcat serves the REST API in URL: `http://localhost:8080` — API base is `http://localhost:8080/api/` by default
 
-## Running the Application
+#### Frontend (recommended)
 
-- **Backend**:
-    - Run with Gradle: `./gradlew bootRun`.
-    - Access at `http://localhost:8080`.
-    - H2 console: `http://localhost:8080/h2-console` (for development/testing).
-
-- **Frontend**:
-    - Open `frontend-app/` in a code editor like VS Code.
-    - Use the Live Server extension to serve at `http://127.0.0.1:5500/index.html`.
-    - Pages currently include login (`index.html`), registration (`register.html`), dashboard (`dashboard.html`) and jumps (`jumps.html`).
+1. Open `frontend-app/` in a code editor like VS Code.
+2. Use the Live Server extension to serve at `http://127.0.0.1:5500/index.html`.
+3. Pages currently include login (`index.html`), registration (`register.html`), dashboard (`dashboard.html`) and jumps (`jumps.html`).
 
 ## API Endpoints
 
@@ -86,22 +150,28 @@ Base URL: `http://localhost:8080`.
     - PUT `/api/jumps/{id}`: Update jump (body: `JumpUpdateDTO`).
     - DELETE `/api/jumps/{id}`: Delete jump.
     - GET `/api/jumps/search`: Search jumps with filters (query params for user, date range, jump type).
-    - GET `/api/jumps/totals`: Get aggregate stats (total jumps, freefall time).
+    - GET `/api/jumps/{*totals*}`: Get aggregate stats (total jumps, freefall time).
+      - GET `/api/jumps/totaljumps`
+      - GET `/api/jumps/totalfreefall`
 
 - **Lookups**:
     - GET `/api/lookups/aircraft`: List aircraft.
     - GET `/api/lookups/dropzones`: List dropzones.
     - GET `/api/lookups/jumptypes`: List jump types.
 
-Use of Postman for testing, with environments set up for authorization and JSON verification.
-
-## Frontend Overview (Under Development)
+## Frontend Overview
 
 - `index.html`: Login form, submits to `/api/auth/login`, stores JWT in localStorage.
 - `register.html`: Registration form, submits to `/api/users`.
-- `dashboard.html`: Displays welcome message, stats cards (total jumps, freefall time), sortable/paginated jumps table, and "Create Jump" button/form. Fetches data from `/api/jumps/all`, `/api/lookups/*`.
+- `dashboard.html`: Displays welcome message, stats cards (total jumps, freefall time), sortable/paginated jumps table, and "Create Jump" button/form. Fetches data from `/api/jumps/all`, `/api/jumps/{*totals*}`.
 - `jumps.html`: Jump creation form, submits to `/api/jumps`.
 - JavaScript files handle API calls, form validation, JWT parsing, and UI updates.
+- JavaScript helpers handle API calls, form validation, JWT parsing, and UI updates:
+  * `frontend-app/js/api.js` - fetch wrappers used by pages
+  * `frontend-app/js/jwt.js` - JWT storage & retrieval helpers
+  * `frontend-app/js/register.js` - register flow
+  * `frontend-app/js/login.js` - login flow
+  * `frontend-app/js/jumps.js` - jumps list operations
 
 ## Testing and Coverage
 

@@ -71,7 +71,7 @@ function renderJumpsTable(jumps, page) {
     tbody.innerHTML = '';
     jumpsData = [...jumps];
 
-    // Client-side sort only for jumpNumber
+    // Client-side sort only for jumpNumber | Ordinal Number Calculated / Not DB Persisted
     
     if (sortColumn === 'jumpNumber') {
         jumpsData.sort((a, b) =>
