@@ -6,9 +6,9 @@
   [![HTML](https://img.shields.io/badge/HTML-%23E34F26.svg?logo=html5&logoColor=white)](#)
   [![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=fff)](#)
   [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](#)
-  ![JUnit](https://img.shields.io/badge/-JUnit-25A162?style=flat&logo=junit5&logoColor=white)
-  ![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
-  ![License](https://img.shields.io/badge/license-MIT-blue)
+  [![JUnit](https://img.shields.io/badge/-JUnit-25A162?style=flat&logo=junit5&logoColor=white)](#)
+  [![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)](#)
+  [![License](https://img.shields.io/badge/license-MIT-blue)](#)
 
 
 A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`.
