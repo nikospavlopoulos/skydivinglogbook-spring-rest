@@ -30,7 +30,8 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 7. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
 8. [Roadmap & Future TODOs](#roadmap--future-todos)
 9. [Installation](#installation)
-    - [Serving options (recommended)](#serving-options-recommended)
+    - [Run with Docker](#-run-with-docker)
+    - [Serving options](#serving-options)
     - [Backend Quickstart](#backend-quickstart)
     - [Frontend (recommended)](#frontend-recommended)
 10. [API Endpoints](#api-endpoints)
@@ -103,13 +104,42 @@ This structure ensures data consistency and supports features like dynamic jump 
 
 ## Installation
 
-#### Serving options (recommended)
+### [![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#) Run with Docker
+
+#### 0. Clone the repository
+```
+git clone [https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git)
+```
+*Get the project source code locally.*
+
+#### 1. Build the image
+```
+docker build -t skydivinglogbook .
+```
+*Uses Corretto 21, copies JAR, creates runnable image.*
+
+#### 2. Run the container
+```
+docker run -d -p 8080:8080 --name sdlog skydivinglogbook:latest
+```
+*Starts container in detached mode, maps port 8080, assigns name `sdlog`.*
+
+#### 3. Access the API
+Via browser or API client:
+```
+[http://localhost:8080/api/](http://localhost:8080/api/)
+```
+
+Check [API Endpoints](#api-endpoints) for all the available ones.
+*Note that the application expects authorized user*
+
+
+### Serving options
 
 1. **Embedded Tomcat (Spring Boot `bootRun`)** : easiest. Just run via a linux Terminal (or equivalent bash terminal in Windows).
 2. **IntelliJ Ultimate + Tomcat** : convenient if you prefer the IDE-managed Tomcat deployment and want to debug in place.
 
 #### Backend Quickstart
-
 
 1. Clone the repository:
    ```

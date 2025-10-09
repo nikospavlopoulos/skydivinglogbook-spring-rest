@@ -6,8 +6,14 @@ plugins {
 }
 
 group = 'com.nikospavlopoulos'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 description = 'skydivingrest'
+
+// Standardize jar name
+bootJar {
+    archiveFileName = 'app.jar'
+}
+
 
 java {
     toolchain {
