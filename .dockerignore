@@ -1,0 +1,12 @@
+.git
+.gitignore
+.gradle
+out/
+build/
+**/target/
+**/*.iml
+.idea/
+*.md
+*.sh
+Dockerfile
+docker-compose.yml
