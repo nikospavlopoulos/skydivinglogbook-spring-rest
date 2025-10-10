@@ -107,22 +107,26 @@ This structure ensures data consistency and supports features like dynamic jump 
 ### [![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#) Run with Docker
 
 #### 0. Clone the repository
-```
-git clone [https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git)
-```
-*Get the project source code locally.*
+```bash
+git clone https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git
+cd skydivinglogbook-spring-rest
+````
 
 #### 1. Build the image
-```
+
+```bash
 docker build -t skydivinglogbook .
 ```
-*Uses Corretto 21, copies JAR, creates runnable image.*
+
+*Builds the multi-stage image using Gradle (builder) and a lightweight JRE runtime (Eclipse Temurin 21 Alpine).*
 
 #### 2. Run the container
+
+```bash
+docker run --rm -p 8080:8080 --name sdlog skydivinglogbook:latest
 ```
-docker run -d -p 8080:8080 --name sdlog skydivinglogbook:latest
-```
-*Starts container in detached mode, maps port 8080, assigns name `sdlog`.*
+
+*Starts the container, maps port 8080, and automatically removes it when stopped (`--rm`).*
 
 #### 3. Access the API
 Via browser or API client:
@@ -133,6 +137,11 @@ Via browser or API client:
 Check [API Endpoints](#api-endpoints) for all the available ones.
 *Note that the application expects authorized user*
 
+The application automatically starts with the H2 in-memory database loaded with:
+
+* Static lookup data (aircraft, dropzones, jump types)
+* Demo user: `user@test.com` / `a@123456`
+* 25 random jumps for sample data
 
 ### Serving options
 
@@ -149,13 +158,19 @@ Check [API Endpoints](#api-endpoints) for all the available ones.
 2. Use H2 profile(`spring.profiles.active=test
 ` in `application.properties`) for zero-friction: the H2 scripts in `src/main/resources/sql/H2/` provide static lookup data and optional `randomjumps.sql`.
 
-   - Use H2 console: `http://localhost:8080/h2-console` (for running the SQL scripts).
+   - Use H2 console: `http://localhost:8080/h2-console`
+   - Make sure the **JDBC URL** is set to: `jdbc:h2:mem:testdb`
+   - Username `sa` and password can remain blank unless modified in configuration.
 
+By default, the H2 in-memory database is automatically initialized with:
+- Static data (aircraft, dropzones, jump types)
+- A demo user (`user@test.com` / `a@123456`)
+- 25 randomly generated jumps for demonstration and testing
 
+All initialization runs automatically on startup via Spring Boot's SQL initialization.
 
 - Alternative: Set up the MySQL database:
     - For development: Install MySQL, create a database (e.g., skydivingdb), update `application.properties` or `application-dev.properties` with credentials (e.g., `spring.datasource.url=jdbc:mysql://localhost:3306/skydivingdb`).
-    - Run initialization scripts from `src/main/resources/sql` to populate static data (aircraft, dropzones, jump types) and optional test jumps.
 
 3. Build the backend & Run the application:
    ```
