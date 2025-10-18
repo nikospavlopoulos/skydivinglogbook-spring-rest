@@ -38,6 +38,16 @@ public class UserServiceImpl implements IUserService{
     private final PageableHandlerMethodArgumentResolverCustomizer pageableCustomizer;
 
 
+    /**
+     * Registers a new user with default SKYDIVER role.
+     * Username (email) is trimmed & normalized to lowercase and checked for uniqueness.
+     * Password is hashed using BCrypt before storage.
+     *
+     * @param dto user registration data including username, password, and optional names
+     * @return the created user with generated ID and UUID
+     * @throws ResourceConflictException if username (email) already exists
+     * @throws ValidationException if user data fails validation constraints
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserLookupDTO createUser(UserInsertDTO dto) throws InvalidArgumentException, ResourceConflictException, ValidationException {
@@ -47,18 +57,10 @@ public class UserServiceImpl implements IUserService{
         // Normalize (trim & LowerCase) username/email
         String username = dto.getUsername().trim().toLowerCase(Locale.ROOT);
 
-        /*
-            // Debugging user already exists
-            System.out.println("\n------");
-            System.out.println("Normalized username: " + username);
-            System.out.println("DB count: " + userRepository.count());
-            System.out.println("Existing user: " + userRepository.findByUsernameAndActiveIsTrue(username));
-            System.out.println("------\n");
-        */
 
         if (userRepository.findByUsernameAndActiveIsTrue(username).isPresent()) {
             throw new ResourceConflictException("The user with email: " + username + " already exists.", HttpStatus.CONFLICT);
-        };
+        }
 
         User user = userMapper.userInsertDTOtoUser(dto);
 
@@ -71,10 +73,22 @@ public class UserServiceImpl implements IUserService{
             User savedUser = userRepository.save(user);
             return userMapper.userToUserLookupDTO(savedUser);
         } catch (DataIntegrityViolationException ex) {
-            throw new ResourceConflictException("Data Integrity - The User with email: " + username + " already exists.", HttpStatus.CONFLICT);
+            throw new ResourceConflictException("Data Integrity - There is a problem with accessing the database.", HttpStatus.CONFLICT);
         }
     }
 
+    /**
+     * Updates user profile information (username, firstname, lastname).
+     * Username changes are validated for uniqueness.
+     * Password cannot be changed through this method (use changePassword instead).
+     *
+     * @param id the ID of the user to update
+     * @param dto the updated profile data (null fields are ignored)
+     * @return the updated user profile
+     * @throws ResourceNotFoundException if user not found or inactive
+     * @throws ResourceConflictException if new username already exists
+     * @throws ValidationException if updated data fails validation
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserLookupDTO updateUser(Long id, UserUpdateDTO dto) throws InvalidArgumentException, ValidationException, ResourceNotFoundException {
@@ -83,7 +97,7 @@ public class UserServiceImpl implements IUserService{
 
         if (existingUser.isEmpty()) {
             throw new ResourceNotFoundException("The user with id: " + id + " is not found.", HttpStatus.NOT_FOUND);
-        };
+        }
 
         User user = existingUser.get();
 
@@ -119,6 +133,15 @@ public class UserServiceImpl implements IUserService{
     }
 
 
+    /**
+     * Deactivates a user account (soft delete).
+     * Sets the user's active flag to false, preventing login while preserving
+     * jump records and maintaining referential integrity.
+     *
+     * @param id the ID of the user to deactivate
+     * @return the deactivated user profile
+     * @throws ResourceNotFoundException if user not found
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserLookupDTO deactivateUser(Long id) {
@@ -136,7 +159,14 @@ public class UserServiceImpl implements IUserService{
         return userMapper.userToUserLookupDTO(user);
     }
 
-
+    /**
+     * Retrieves a single user by ID.
+     * Used for displaying a user's profile information.
+     *
+     * @param id the ID of the user to retrieve
+     * @return the user's profile data
+     * @throws ResourceNotFoundException if user with the given ID does not exist
+     */
     @Override
     @Transactional(readOnly = true)
     public UserLookupDTO getUser(Long id) throws ResourceNotFoundException {
@@ -149,6 +179,15 @@ public class UserServiceImpl implements IUserService{
     }
 
 
+    /**
+     * Retrieves all users with pagination.
+     * Typically used by administrators to manage user accounts.
+     * Results are ordered by default repository ordering.
+     *
+     * @param page zero-based page number (first page is 0)
+     * @param size number of users per page
+     * @return a page of users
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<UserLookupDTO> getAllUsers(int page, int size) {
@@ -161,6 +200,17 @@ public class UserServiceImpl implements IUserService{
     }
 
 
+    /**
+     * Changes a user's password after verifying the old password.
+     * Validates that the new password is different from the current one.
+     * New password is hashed before storage.
+     *
+     * @param id the ID of the user
+     * @param dto contains old password for verification and new password
+     * @throws ResourceNotFoundException if user not found
+     * @throws UnauthorizedException if old password doesn't match
+     * @throws ResourceConflictException if new password is the same as old password
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void changePassword(Long id, PasswordUpdateDTO dto) throws ResourceConflictException, ResourceNotFoundException, UnauthorizedException {

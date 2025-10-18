@@ -7,11 +7,22 @@ import com.nikospavlopoulos.skydivingrest.dto.UserUpdateDTO;
 import com.nikospavlopoulos.skydivingrest.dto.lookup.UserLookupDTO;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 /**
- * Interface handling User related Operations *
- * Operations: Create, Edit/Update , Delete, Get, List(used by ADMINS)
+ * Service interface for managing user accounts and profiles.
+ * Handles user registration, user retrieval, profile updates, password management, and soft deletion.
+ *
+ * Key responsibilities:
+ * - User registration with default SKYDIVER role
+ * - Profile information updates
+ * - Password change with verification
+ * - User deactivation (soft delete)
+ * - User retrieval for profile viewing
+ *
+ * Note: User deletion is implemented as soft delete (setting active=false)
+ * to maintain referential integrity with jump records.
+ *
+ * @see UserServiceImpl
+ * @see com.nikospavlopoulos.skydivingrest.rest.UserController
  */
 
 public interface IUserService {
@@ -22,14 +33,11 @@ public interface IUserService {
     // Update User
     UserLookupDTO updateUser(Long id, UserUpdateDTO dto) throws InvalidArgumentException,ValidationException, ResourceNotFoundException;
 
-
     // Soft-Delete User (soft delete with deactivating)
     UserLookupDTO deactivateUser(Long id);
 
-
     // Get User
     UserLookupDTO getUser(Long id) throws ResourceNotFoundException;
-
 
     // List Users
     Page<UserLookupDTO> getAllUsers(int page, int size);
