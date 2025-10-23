@@ -27,18 +27,19 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 4. [Features](#features)
 5. [Tech Stack](#tech-stack)
 6. [Database Schema](#database-schema)
-7. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
-8. [Roadmap & Future TODOs](#roadmap--future-todos)
-9. [Installation](#installation)
+7. [Architecture — Class Diagram](#architecture--class-diagram-high-level)
+8. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
+9. [Roadmap & Future TODOs](#roadmap--future-todos)
+10. [Installation](#installation)
     - [Run with Docker](#-run-with-docker)
     - [Serving options](#serving-options)
     - [Backend Quickstart](#backend-quickstart)
     - [Frontend (recommended)](#frontend-recommended)
-10. [API Endpoints](#api-endpoints)
-11. [Frontend Overview](#frontend-overview)
-12. [Testing and Coverage](#testing-and-coverage)
-13. [Project Structure](#project-structure)
-14. [License](#license)
+11. [API Endpoints](#api-endpoints)
+12. [Frontend Overview](#frontend-overview)
+13. [Testing and Coverage](#testing-and-coverage)
+14. [Project Structure](#project-structure)
+15. [License](#license)
 
 ## Goals & Scope
 
@@ -84,6 +85,15 @@ This structure ensures data consistency and supports features like dynamic jump 
 
 ![database_schema.png](misc/database_schema.png)
 
+## Architecture — Class Diagram (high level)
+
+Below is a compact, high-level class diagram showing the main domain classes and their relationships.
+
+> **Detailed class diagram (methods, attributes & dependencies):** For the full diagram with class members and dependency details, see **[Detailed UML diagram](misc/uml-class-diagram.png)**.
+
+![UML Overview — classes and relationships](misc/short-uml-class-diagram.png)
+
+**Quick notes:** The diagram illustrates the main domain entities (`User`, `Jump`, `Aircraft`, `Dropzone`, `JumpType`), the layered design separating business logic (services) from the API layer (controllers), and the project’s authentication and authorization setup.
 
 ## Design decisions & trade-offs
 
@@ -158,9 +168,9 @@ The application automatically starts with the H2 in-memory database loaded with:
 2. Use H2 profile(`spring.profiles.active=test
 ` in `application.properties`) for zero-friction: the H2 scripts in `src/main/resources/sql/H2/` provide static lookup data and optional `randomjumps.sql`.
 
-   - Use H2 console: `http://localhost:8080/h2-console`
-   - Make sure the **JDBC URL** is set to: `jdbc:h2:mem:testdb`
-   - Username `sa` and password can remain blank unless modified in configuration.
+    - Use H2 console: `http://localhost:8080/h2-console`
+    - Make sure the **JDBC URL** is set to: `jdbc:h2:mem:testdb`
+    - Username `sa` and password can remain blank unless modified in configuration.
 
 By default, the H2 in-memory database is automatically initialized with:
 - Static data (aircraft, dropzones, jump types)
@@ -176,7 +186,7 @@ All initialization runs automatically on startup via Spring Boot's SQL initializ
    ```
    ./gradlew build && ./gradlew bootRun
    ```
-   
+
 4. Embedded Tomcat serves the REST API in URL: `http://localhost:8080` — API base is `http://localhost:8080/api/` by default
 
 #### Frontend (recommended)
@@ -207,8 +217,8 @@ Base URL: `http://localhost:8080`.
     - DELETE `/api/jumps/{id}`: Delete jump.
     - GET `/api/jumps/search`: Search jumps with filters (query params for user, date range, jump type).
     - GET `/api/jumps/{*totals*}`: Get aggregate stats (total jumps, freefall time).
-      - GET `/api/jumps/totaljumps`
-      - GET `/api/jumps/totalfreefall`
+        - GET `/api/jumps/totaljumps`
+        - GET `/api/jumps/totalfreefall`
 
 - **Lookups**:
     - GET `/api/lookups/aircraft`: List aircraft.
@@ -223,11 +233,11 @@ Base URL: `http://localhost:8080`.
 - `jumps.html`: Jump creation form, submits to `/api/jumps`.
 - JavaScript files handle API calls, form validation, JWT parsing, and UI updates.
 - JavaScript helpers handle API calls, form validation, JWT parsing, and UI updates:
-  * `frontend-app/js/api.js` - fetch wrappers used by pages
-  * `frontend-app/js/jwt.js` - JWT storage & retrieval helpers
-  * `frontend-app/js/register.js` - register flow
-  * `frontend-app/js/login.js` - login flow
-  * `frontend-app/js/jumps.js` - jumps list operations
+    * `frontend-app/js/api.js` - fetch wrappers used by pages
+    * `frontend-app/js/jwt.js` - JWT storage & retrieval helpers
+    * `frontend-app/js/register.js` - register flow
+    * `frontend-app/js/login.js` - login flow
+    * `frontend-app/js/jumps.js` - jumps list operations
 
 ## Testing and Coverage
 
