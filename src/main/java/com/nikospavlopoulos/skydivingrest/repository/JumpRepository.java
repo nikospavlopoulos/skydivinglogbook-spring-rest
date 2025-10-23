@@ -28,12 +28,6 @@ public interface JumpRepository extends JpaRepository<Jump, Long>, JpaSpecificat
     // Search query Date
     Page<Jump> findJumpByUserIdAndJumptype(Long userId, Jumptype jumptype, Pageable pageable);
 
-    // Calculate Skydiver's jump's ordinal number (based on Id - bug regarding date calculation
-    long countByUserIdAndIdLessThanEqual(Long userId, Long JumpIdIsLessThan);
-
-    // Calculate Skydiver's jump's ordinal number (based on date - bug regarding calculation of jumps that happened on the same date)
-    long countByUserIdAndJumpDateLessThanEqual(Long userId, LocalDateTime jumpDateIsLessThan);
-
     // Calculate Skydiver's jump's ordinal number (based on date and then on jump id - correct)
     long countByUserIdAndJumpDateLessThanEqualAndIdLessThanEqual(Long userId, LocalDateTime jumpDateIsLessThan, Long idIsLessThan);
 
