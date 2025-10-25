@@ -36,7 +36,8 @@ jacocoTestReport {
 }
 
 test {
-    exclude '**/*'
+//    exclude '**/*'
+    ignoreFailures = true
 }
 
 configurations {

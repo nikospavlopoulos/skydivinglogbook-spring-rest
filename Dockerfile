@@ -8,6 +8,7 @@ RUN gradle clean bootJar
 #Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /
+ENV SPRING_PROFILES_ACTIVE=demo
 COPY --from=builder /build/libs/app.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 
