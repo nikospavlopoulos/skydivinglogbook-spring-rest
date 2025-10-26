@@ -28,7 +28,7 @@ jobs:
 
       # 3. Cache Gradle dependencies and wrapper
       - name: Cache Gradle
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -43,28 +43,28 @@ jobs:
 
       # 5. Upload test result XML files
       - name: Upload JUnit test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: junit-results
           path: build/test-results/test
 
       # 6. Upload test report HTML files
       - name: Upload test HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: html-test-report
           path: build/reports/tests/test
 
       # 7 Upload JaCoCo HTML report
       - name: Upload JaCoCo HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-html-report
           path: build/jacocoHtml
 
       # 7 Upload JaCoCo XML report
       - name: Upload JaCoCo XML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-xml-report
           path: build/reports/jacoco/test/jacocoTestReport.xml
