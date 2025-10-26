@@ -7,9 +7,10 @@
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=fff)](#)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](#)
 [![JUnit](https://img.shields.io/badge/-JUnit-25A162?style=flat&logo=junit5&logoColor=white)](#)
-[![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)](#)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#)
-[![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#) <br><br>
+[![Tests](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml/badge.svg)](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml)
+[![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen)](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml)
 
 A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`.
 
@@ -37,7 +38,7 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
     - [Frontend (recommended)](#frontend-recommended)
 11. [API Endpoints](#api-endpoints)
 12. [Frontend Overview](#frontend-overview)
-13. [Testing and Coverage](#testing-and-coverage)
+13. [Testing (CI Integration / GitHub Actions) and Coverage](#testing-ci-integration--github-actions-and-coverage)
 14. [Project Structure](#project-structure)
 15. [License](#license)
 
@@ -239,13 +240,19 @@ Base URL: `http://localhost:8080`.
     * `frontend-app/js/login.js` - login flow
     * `frontend-app/js/jumps.js` - jumps list operations
 
-## Testing and Coverage
+## Testing (CI Integration / GitHub Actions) and Coverage
 
 Tests cover repositories, services, controllers, security, DTO validation, and integration scenarios.
 
-- Coverage tool: JaCoCo.
+- **CI Integration**: Automated test execution is set up via GitHub Actions.
+    - Runs on every push or pull request to `docker` and `main` branches.
+    - Ensures that all tests pass before code merges.
+    - Automatically uploads test results (JUnit XML) and HTML reports, including JaCoCo coverage, as downloadable artifacts for inspection.
+- **Coverage**: Enabled via JaCoCo in Gradle.
+    - HTML report generated at `build/jacocoHtml` (artifact downloadable from CI run).
+    - Provides a clear overview of code coverage for all classes and methods.
 
-### JaCoCo & Gradle report (12/09/2025):
+### JaCoCo & Gradle report (26/10/2025):
 
 ![jacoco_test_report.png](misc/jacoco_test_report.png)
 ![gradle_test_report.png](misc/gradle_test_report.png)
