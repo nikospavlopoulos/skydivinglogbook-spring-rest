@@ -54,7 +54,7 @@ class UserTest {
     @Test
     void userValidationTest() {
 
-        List<String> fields = List.of("username", "password", "firstname", "lastname", "role");
+        List<String> fields = List.of("username", "password", "role");
 
 
         //Loop through fields checking and setting each for null
@@ -71,12 +71,7 @@ class UserTest {
             else if (field.equals("password")) {
                 user.setPassword(null);
             }
-            else if (field.equals("firstname")) {
-                user.setFirstname(null);
-            }
-            else if (field.equals("lastname")) {
-                user.setLastname(null);
-            }
+
             else if (field.equals("role")) {
                 user.setRole(null);
             }

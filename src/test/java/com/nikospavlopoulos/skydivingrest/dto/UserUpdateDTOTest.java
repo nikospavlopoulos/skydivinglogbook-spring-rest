@@ -3,12 +3,14 @@ package com.nikospavlopoulos.skydivingrest.dto;
 import jakarta.validation.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 class UserUpdateDTOTest {
 
     private Validator validator;
