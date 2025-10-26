@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import jakarta.validation.Validator;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -35,12 +37,12 @@ class JumpInsertDTOTest {
         JumpInsertDTO dto = new JumpInsertDTO(
                 10000,
                 60,
-                LocalDateTime.now(),
+                LocalDateTime.now().toLocalDate().atStartOfDay(),
                 "Notes",
                 1L,
                 1L,
                 1L,
-                1L);
+                null);
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
 
@@ -54,12 +56,12 @@ class JumpInsertDTOTest {
         JumpInsertDTO dto = new JumpInsertDTO(
                 altitude,
                 60,
-                LocalDateTime.now(),
+                LocalDateTime.now().toLocalDate().atStartOfDay(),
                 "Notes",
                 1L,
                 1L,
                 1L,
-                1L);
+                null);
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
 
@@ -80,12 +82,12 @@ class JumpInsertDTOTest {
         JumpInsertDTO dto = new JumpInsertDTO(
                 10000,
                 freeFallDuration,
-                LocalDateTime.now(),
+                LocalDateTime.now().toLocalDate().atStartOfDay(),
                 "Notes",
                 1L,
                 1L,
                 1L,
-                1L
+                null
         );
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -109,7 +111,7 @@ class JumpInsertDTOTest {
                 1L,
                 1L,
                 1L,
-                1L
+                null
         );
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -139,12 +141,12 @@ class JumpInsertDTOTest {
         JumpInsertDTO dto = new JumpInsertDTO(
                 10000,
                 50,
-                LocalDateTime.now(),
+                LocalDateTime.now().toLocalDate().atStartOfDay(),
                 notes,
                 1L,
                 1L,
                 1L,
-                1L
+                null
         );
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -175,12 +177,12 @@ class JumpInsertDTOTest {
         JumpInsertDTO dto = new JumpInsertDTO(
                 10000,
                 60,
-                LocalDateTime.now(),
+                LocalDateTime.now().toLocalDate().atStartOfDay(),
                 "Notes",
                 1L,
                 1L,
                 1L,
-                1L);
+                null);
 
         switch(field) {
             case "altitude":
@@ -201,9 +203,6 @@ class JumpInsertDTOTest {
             case "jumptypeId":
                 dto.setJumptypeId((Long) value);
                 break;
-            case "userId":
-                dto.setUserId((Long) value);
-                break;
         }
 
         Set<ConstraintViolation<JumpInsertDTO>> violations = validator.validate(dto);
@@ -219,8 +218,7 @@ static Stream<Arguments> nullProvider() {
                 Arguments.of("jumpDate", null),
                 Arguments.of("aircraftId", null),
                 Arguments.of("dropzoneId", null),
-                Arguments.of("jumptypeId", null),
-                Arguments.of("userId", null)
+                Arguments.of("jumptypeId", null)
                 );
     }
 

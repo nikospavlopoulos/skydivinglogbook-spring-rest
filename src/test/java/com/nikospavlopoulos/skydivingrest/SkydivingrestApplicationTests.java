@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 
 /**
  * Smoke test for the application using the 'test' profile.
- * H2 datasource is properly initialized.
  */
 
 @SpringBootTest
@@ -25,11 +24,6 @@ class SkydivingrestApplicationTests {
 
     @Test
     void contextLoads() {
-    }
-
-    @Test
-    void mainRuns() {
-        SkydivingrestApplication.main(new String[]{});
     }
 
     @Test

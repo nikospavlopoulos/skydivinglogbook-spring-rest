@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
  * Focusing mainly on pure Junit testing using Mockito
  */
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class ErrorHandlerTest {
 

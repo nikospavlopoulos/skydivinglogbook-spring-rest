@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.when;
  * with mocking for DataIntegrity violation check
  */
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplUnitTest {
 

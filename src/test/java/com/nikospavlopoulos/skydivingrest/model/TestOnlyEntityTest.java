@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * A test only entity to test Abstract Class
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ActiveProfiles("test")
 @Table(name = "test_only_table")
 public class TestOnlyEntityTest extends AbstractEntity{
 
