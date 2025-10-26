@@ -1,5 +1,6 @@
 package com.nikospavlopoulos.skydivingrest.security.jwt;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Clock;
@@ -7,6 +8,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
+@ActiveProfiles("test")
 public class JwtTestUtilsHelper {
 
     private static JwtServiceImpl jwtService = new JwtServiceImpl(Clock.systemUTC());

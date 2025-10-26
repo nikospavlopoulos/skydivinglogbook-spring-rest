@@ -80,14 +80,14 @@ public class JwtServiceImpl implements IJwtService{
 
         JwtParser jwtParser = Jwts.parser()
                 .verifyWith(getSigninKey()) // enforce correct signature
+                .clock(() -> Date.from(clock.instant()))
                 .build();
         try {
 
-            return jwtParser.parseSignedClaims(token).getPayload().getExpiration().after(new Date());  // (Use this for production) valid if expiration is in the future
-
-//            return jwtParser.parseSignedClaims(token).getPayload().getExpiration().after(Date.from(clock.instant()));  // (Use this for Testing)
-
-
+        return jwtParser.parseSignedClaims(token)
+                .getPayload()
+                .getExpiration()
+                .after(Date.from(clock.instant()));
         } catch (Exception e) {
             return false; // Any other Failure (Signature, Malformed etc)
         }
@@ -104,6 +104,7 @@ public class JwtServiceImpl implements IJwtService{
     public String extractUsername(String token) {
         JwtParser jwtParser = Jwts.parser()
                 .verifyWith(getSigninKey())
+                .clock(() -> Date.from(clock.instant()))
                 .build();
 
         return jwtParser.parseSignedClaims(token).getPayload().getSubject();
