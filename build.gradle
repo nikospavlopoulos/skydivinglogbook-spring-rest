@@ -122,6 +122,8 @@ dependencies {
     // where you want to map DTOs/entities without relying on main source mappers).
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.6.3"
 
+    // Include Actuator Health Endpoints
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 // ----------------------------------------
