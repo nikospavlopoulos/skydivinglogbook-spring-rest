@@ -10,9 +10,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](#)
 [![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#) <br><br>
 [![Tests](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml/badge.svg)](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml)
-[![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen)](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml)
+[![Coverage](https://img.shields.io/badge/Coverage-88%25-orange)](https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest/actions/workflows/test-workflow.yml)
 
-A RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data like aircraft, dropzones, and jump types. Built with Spring Boot, it includes JWT-based security, CRUD operations, search functionality, and a basic frontend for user interaction. The project is structured as a monorepo, with the backend in `src` and the frontend in `frontend-app`.
+A **Kubernetes-ready**, event-driven RESTful API for tracking skydiving jumps, managing user accounts, and handling related static data. Built with Spring Boot, it features JWT-based security, comprehensive observability, and automated CI/CD integration.
 
 ## Video Demo
 
@@ -22,282 +22,156 @@ A RESTful API for tracking skydiving jumps, managing user accounts, and handling
 
 ## Table of Contents
 
-1. [Skydiving Logbook REST API](#skydiving-logbook-rest-api)
-2. [Goals & Scope](#goals--scope)
-3. [TL;DR / What this repo contains](#tldr--what-this-repo-contains)
+1. [Goals & Scope](#goals--scope)
+2. [TL;DR / What this repo contains](#tldr--what-this-repo-contains)
+3. [Configuration & Environment](#configuration--environment)
 4. [Features](#features)
 5. [Tech Stack](#tech-stack)
 6. [Database Schema](#database-schema)
-7. [Architecture — Class Diagram](#architecture--class-diagram-high-level)
+7. [Architecture — Class Diagrams](#architecture--class-diagrams)
 8. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
 9. [Roadmap & Future TODOs](#roadmap--future-todos)
-10. [Installation](#installation)
+10. [Installation & Setup](#installation--setup)
     - [Run with Docker](#-run-with-docker)
-    - [Serving options](#serving-options)
     - [Backend Quickstart](#backend-quickstart)
-    - [Frontend (recommended)](#frontend-recommended)
+    - [Frontend Overview](#frontend-overview)
 11. [API Endpoints](#api-endpoints)
-12. [Frontend Overview](#frontend-overview)
-13. [Testing (CI Integration / GitHub Actions) and Coverage](#testing-ci-integration--github-actions-and-coverage)
-14. [Project Structure](#project-structure)
-15. [License](#license)
+12. [Testing & CI/CD](#testing--cicd)
+13. [Project Structure](#project-structure)
+14. [License](#license)
 
 ## Goals & Scope
 
-* **Core REST API**: Provide a robust and well-structured REST API for managing a personal skydiving logbook (users, jumps, and related stats).
-* **Demo Frontend**: Include a lightweight frontend for manual testing, demoing flows, and serving as a reference for API consumption.
-* **Code Quality**: Emphasize clean DTOs, clear separation of concerns, maintainable architecture, and strong test coverage.
-* **Extensibility**: Design the backend so it can support future clients such as a SPA (React/Angular) and a native Android app.
-* **Deployment Readiness**: Keep the project ready for containerization (Docker), cloud deployment, and integration with documentation tools (Swagger/OpenAPI).
+*   **Production Readiness**: Decoupled configuration and environment isolation for seamless cloud/K8s deployment.
+*   **Observability**: Integrated health monitoring and interactive documentation for developers and operators.
+*   **Event-Driven Architecture**: Decoupled business logic using Spring Application Events for features like demo data generation.
+*   **Maintainability**: High test coverage and strict separation of concerns between API, Service, and Persistence layers.
+*   **Extensibility**: Designed to support future clients such as SPAs (React/Angular) and native mobile apps.
 
 ## TL;DR / What this repo contains
 
-* Backend: Java 21 + Spring Boot (REST API). Business logic lives under `src/main/java/com/nikospavlopoulos/skydivingrest`.
-* Frontend: simple vanilla HTML/JS in `frontend-app/` used for manual demos (login, register, dashboard, jump creation). Styled and customized using Bootstrap framework and CSS.
-* DB initialization scripts: `src/main/resources/sql/` (H2 and MySQL flavors). Use these to seed static lookup data and example jumps.
+* **Backend**: Java 21 + Spring Boot (REST API). Core logic lives under `src/main/java/com/nikospavlopoulos/skydivingrest`.
+* **Frontend**: Lightweight vanilla HTML/JS in `frontend-app/` used for manual demos (login, registration, dashboard).
+* **DB Initialization**: SQL scripts in `src/main/resources/sql/` (H2 and MySQL) to seed static lookup data and demo records.
+
+## Configuration & Environment
+
+This application follows the **Twelve-Factor App** methodology. All sensitive data and environment-specific settings are decoupled from the source code.
+
+*   **Local Setup**: A `.env_example` template is provided in the root. Copy this to `.env` and populate it with your local secrets (JWT, Database credentials).
+*   **Dynamic Mapping**: Spring Boot automatically injects these variables into property placeholders (e.g., `${JWT_SECRET}`).
+*   **Environment Toggles**: Features such as **CORS Allowed Origins** and **Swagger Visibility** are controlled via environment variables.
 
 ## Features
 
-- User authentication and management (registration, login, profile update, password change).
-- Jump logging with details like jump number (dynamically calculated), altitude, freefall duration, date, notes, aircraft, dropzone, and jump type.
-- Static data lookups for aircraft, dropzones, and jump types (pre-populated via SQL scripts).
-- Dashboard stats: Total jumps, total freefall time, sortable/paginated jump list with actions (create, edit, delete).
-- Role-based access (user/admin via Role enum).
-- Search and pagination for jumps with filters (user, date range, jump type) using JPA specifications.
-- Error handling with custom exceptions and standardized JSON responses.
-- Frontend forms for login, registration, jump creation, and dashboard display.
-
+- **Observability**: Integrated **Spring Boot Actuator** providing Liveness and Readiness probes for Kubernetes orchestration.
+- **Interactive Documentation**: **Swagger UI (OpenAPI 3)** integration, accessible at `/swagger-ui.html` (toggleable via `SWAGGER_ENABLED`).
+- **Event-Driven Demo Logic**: Automatic generation of 5 curated sample jumps for new users when running in the `demo` profile.
+- **Security**: JWT-based stateless authentication with BCrypt password hashing and role-based access control (User/Admin).
+- **Jump Logging**: Comprehensive tracking with dynamic jump numbering and JPA Specification-based multi-criteria search.
+- **Dashboard Stats**: Aggregate statistics (total jumps, total freefall time) and paginated/sortable jump lists.
+- **Error Handling**: Standardized JSON responses with custom business exception mapping.
 
 ## Tech Stack
 
 - **Backend**: Java 21, Spring Boot, Spring Data JPA, Hibernate, Spring Security, JWT.
-- **Build Tool**: Gradle (dependencies include spring-boot-starter-web, spring-boot-starter-data-jpa, spring-boot-starter-security, mysql-connector-java, h2-database, jjwt, lombok, mapstruct).
-- **Database**: MySQL (development), H2 (testing).
-- **Security**: Spring Security with JWT-based stateless authentication.
-- **Testing**: Spring Boot Integration Tests, JUnit 5, Mockito, JaCoCo for coverage.
-- **Frontend**: HTML, JavaScript. Styling/customization with Bootstrap and CSS.
-- **SQL**: seed scripts for H2 and MySQL in `src/main/resources/sql/`. (separate scripts to cover slight syntactic differences)
-- **Other**: MapStruct for entity-DTO mapping, JPA specifications for queries, logging interceptor, Jackson for JSON serialization, CORS configuration.
+- **Observability**: Spring Boot Actuator, Springdoc OpenAPI 3.
+- **Build Tool**: Gradle (Dependencies: `spring-dotenv`, `jjwt`, `lombok`, `mapstruct`).
+- **Database**: MySQL (Development), H2 (Testing/Demo).
+- **Testing**: JUnit 5, Mockito, JaCoCo, GitHub Actions.
+- **Frontend**: Vanilla HTML5, JavaScript, Bootstrap CSS.
 
 ## Database Schema
 
-The database schema defines the relationships between users, jumps, aircraft, dropzones, and jump types.  
-This structure ensures data consistency and supports features like dynamic jump numbering, search filters, and aggregate statistics.
+The schema ensures data consistency across users, jumps, aircraft, dropzones, and jump types.
 
 ![database_schema.png](misc/database_schema.png)
 
-## Architecture — Class Diagram (high level)
+## Architecture — Class Diagrams
 
 Below is a compact, high-level class diagram showing the main domain classes and their relationships.
 
+![UML Overview](misc/short-uml-class-diagram.png)
+
 > **Detailed class diagram (methods, attributes & dependencies):** For the full diagram with class members and dependency details, see **[Detailed UML diagram](misc/uml-class-diagram.png)**.
 
-![UML Overview — classes and relationships](misc/short-uml-class-diagram.png)
+## Design Decisions & Trade-offs
 
-**Quick notes:** The diagram illustrates the main domain entities (`User`, `Jump`, `Aircraft`, `Dropzone`, `JumpType`), the layered design separating business logic (services) from the API layer (controllers), and the project’s authentication and authorization setup.
+*   **JWT for Stateless Auth**: Chosen for REST-first simplicity; trades off server-side session invalidation for scalability.
+*   **MapStruct for DTO Mapping**: Reduces boilerplate and keeps services clean; trades off a slightly steeper learning curve for compile-time safety.
+*   **JPA Specifications**: Provides flexible multi-criteria queries without a separate query DSL; trades off code verbosity for powerful search capabilities.
+*   **Standalone Frontend**: The `frontend-app/` is isolated to allow independent iteration, requiring CORS configuration for cross-origin communication.
 
-## Design decisions & trade-offs
+## Roadmap & Future TODOs
 
-* **JWT for stateless authentication** : Chosen for simplicity and because the API is REST-first. Trade-offs: No server-side session invalidation.
+1.  **Kubernetes Deployment**: Finalize Helm charts/manifests for cluster deployment.
+2.  **GitOps Integration**: Automate deployments via ArgoCD.
 
-* **MapStruct for DTO mapping** : Compile-time mapping reduces boilerplate and keeps service code clean. Trade-offs: Slightly steeper learning curve and handling mapping nulls/updates.
+---
 
-* **JPA Specifications for search** : Flexible multi-criteria queries without a separate query DSL. Trade-offs: longer code to build specs, more unit tests required to validate query behavior and edge-case ordering.
-
-* **Separate static frontend** : Kept the frontend as a small standalone folder (`frontend-app/`) instead of packaging it into Spring Boot so the frontend can be iterated independently. Tradeoffs: extra steps to serve frontend from a different server.
-
-## Roadmap & future TODOs
-
-1. **Swagger/OpenAPI**: integrate automatic API documentaion and example requests & responses for each endpoint.
-2. **Docker**: create a `Dockerfile` for containerization and easy deployment to different environments (local, staging, production).
-3. **Enhanced Frontend**: Transition to a modern Single Page Application (SPA) using React or Angular.
-4. **Android App**: Build a native Android application that consumes the existing REST API, with offline mode with local storage.
-
-## Installation
+## Installation & Setup
 
 ### [![Docker](https://img.shields.io/badge/Docker-✔-2496ED?logo=docker&logoColor=white)](#) Run with Docker
 
-#### 0. Clone the repository
-```bash
-git clone https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git
-cd skydivinglogbook-spring-rest
-````
+#### 1. Setup Environment
+Ensure you have created a `.env` file from the `.env_example` template.
 
-#### 1. Build the image
-
+#### 2. Build and Run
 ```bash
 docker build -t skydivinglogbook .
+docker run --rm -p 8080:8080 --env-file .env --name sdlog skydivinglogbook:latest
 ```
+*The `--env-file .env` flag is critical to pass your secrets and configuration to the container.*
 
-*Builds the multi-stage image using Gradle (builder) and a lightweight JRE runtime (Eclipse Temurin 21 Alpine).*
+### Backend Quickstart
 
-#### 2. Run the container
-
-```bash
-docker run --rm -p 8080:8080 --name sdlog skydivinglogbook:latest
-```
-
-*Starts the container, maps port 8080, and automatically removes it when stopped (`--rm`).*
-
-#### 3. Access the API
-Via browser or API client:
-```
-[http://localhost:8080/api/](http://localhost:8080/api/)
-```
-
-Check [API Endpoints](#api-endpoints) for all the available ones.
-*Note that the application expects authorized user*
-
-The application automatically starts with the H2 in-memory database loaded with:
-
-* Static lookup data (aircraft, dropzones, jump types)
-* Demo user: `user@test.com` / `a@123456`
-* 25 random jumps for sample data
-
-### Serving options
-
-1. **Embedded Tomcat (Spring Boot `bootRun`)** : easiest. Just run via a linux Terminal (or equivalent bash terminal in Windows).
-2. **IntelliJ Ultimate + Tomcat** : convenient if you prefer the IDE-managed Tomcat deployment and want to debug in place.
-
-#### Backend Quickstart
-
-1. Clone the repository:
+1. **Setup .env**: Copy `.env_example` to `.env` and configure your local secrets.
+2. **Build & Run**:
+   ```bash
+   ./gradlew bootRun
    ```
-   git clone https://github.com/nikospavlopoulos/skydivinglogbook-spring-rest.git
+   *To enable the demo profile (automatic jump generation):*
+   ```bash
+   ./gradlew bootRun --args='--spring.profiles.active=demo'
    ```
 
-2. Use H2 profile(`spring.profiles.active=test
-` in `application.properties`) for zero-friction: the H2 scripts in `src/main/resources/sql/H2/` provide static lookup data and optional `randomjumps.sql`.
+### Frontend Overview
+Open `frontend-app/` in VS Code and use the **Live Server** extension to serve at `http://127.0.0.1:5500`.
 
-    - Use H2 console: `http://localhost:8080/h2-console`
-    - Make sure the **JDBC URL** is set to: `jdbc:h2:mem:testdb`
-    - Username `sa` and password can remain blank unless modified in configuration.
-
-By default, the H2 in-memory database is automatically initialized with:
-- Static data (aircraft, dropzones, jump types)
-- A demo user (`user@test.com` / `a@123456`)
-- 25 randomly generated jumps for demonstration and testing
-
-All initialization runs automatically on startup via Spring Boot's SQL initialization.
-
-- Alternative: Set up the MySQL database:
-    - For development: Install MySQL, create a database (e.g., skydivingdb), update `application.properties` or `application-dev.properties` with credentials (e.g., `spring.datasource.url=jdbc:mysql://localhost:3306/skydivingdb`).
-
-3. Build the backend & Run the application:
-   ```
-   ./gradlew build && ./gradlew bootRun
-   ```
-
-4. Embedded Tomcat serves the REST API in URL: `http://localhost:8080` — API base is `http://localhost:8080/api/` by default
-
-#### Frontend (recommended)
-
-1. Open `frontend-app/` in a code editor like VS Code.
-2. Use the Live Server extension to serve at `http://127.0.0.1:5500/index.html`.
-3. Pages currently include login (`index.html`), registration (`register.html`), dashboard (`dashboard.html`) and jumps (`jumps.html`).
+---
 
 ## API Endpoints
 
 Base URL: `http://localhost:8080`.
 
+- **Monitoring & Documentation**:
+    - GET `/actuator/health`: System health status (Liveness/Readiness).
+    - GET `/swagger-ui.html`: Interactive API Docs (if enabled).
 - **Authentication**:
-    - POST `/api/auth/login`: Authenticate user and return JWT (body: `AuthenticationRequestDTO` with username/password).
-    - POST `/api/users`: Register user (body: `UserInsertDTO`).
-
-- **Users**:
-    - GET `/api/users/{id}`: Get user details.
-    - PUT `/api/users/{id}`: Update user (body: `UserUpdateDTO`).
-    - PUT `/api/users/{id}/password`: Update password (body: `PasswordUpdateDTO`).
-    - DELETE `/api/users/{id}`: Delete user.
-
+    - POST `/api/auth/login`: Authenticate and return JWT.
+    - POST `/api/users`: Register a new user.
 - **Jumps**:
-    - GET `/api/jumps/all`: List all jumps for the user (with pagination and sorting).
-    - GET `/api/jumps/{id}`: Get specific jump.
-    - POST `/api/jumps`: Create jump (body: `JumpInsertDTO`).
-    - PUT `/api/jumps/{id}`: Update jump (body: `JumpUpdateDTO`).
-    - DELETE `/api/jumps/{id}`: Delete jump.
-    - GET `/api/jumps/search`: Search jumps with filters (query params for user, date range, jump type).
-    - GET `/api/jumps/{*totals*}`: Get aggregate stats (total jumps, freefall time).
-        - GET `/api/jumps/totaljumps`
-        - GET `/api/jumps/totalfreefall`
+    - GET `/api/jumps/all`: List all jumps (paginated).
+    - POST `/api/jumps`: Create a new entry.
+    - GET `/api/jumps/search`: Filtered search (date, type, etc.).
 
-- **Lookups**:
-    - GET `/api/lookups/aircraft`: List aircraft.
-    - GET `/api/lookups/dropzones`: List dropzones.
-    - GET `/api/lookups/jumptypes`: List jump types.
+---
 
-## Frontend Overview
+## Testing & CI/CD
 
-- `index.html`: Login form, submits to `/api/auth/login`, stores JWT in localStorage.
-- `register.html`: Registration form, submits to `/api/users`.
-- `dashboard.html`: Displays welcome message, stats cards (total jumps, freefall time), sortable/paginated jumps table, and "Create Jump" button/form. Fetches data from `/api/jumps/all`, `/api/jumps/{*totals*}`.
-- `jumps.html`: Jump creation form, submits to `/api/jumps`.
-- JavaScript files handle API calls, form validation, JWT parsing, and UI updates.
-- JavaScript helpers handle API calls, form validation, JWT parsing, and UI updates:
-    * `frontend-app/js/api.js` - fetch wrappers used by pages
-    * `frontend-app/js/jwt.js` - JWT storage & retrieval helpers
-    * `frontend-app/js/register.js` - register flow
-    * `frontend-app/js/login.js` - login flow
-    * `frontend-app/js/jumps.js` - jumps list operations
+- **Automated CI**: GitHub Actions executes the test suite on every push to `develop` or `main`.
+- **Secrets Management**: The pipeline utilizes **GitHub Secrets and Variables** to securely inject required environment variables.
+- **Coverage**: JaCoCo generates detailed reports at `build/jacocoHtml/index.html`.
 
-## Testing (CI Integration / GitHub Actions) and Coverage
+### Branching Strategy
+- **`main`**: Stable, production-ready code.
+- **`develop`**: Primary integration branch.
+- **`feat/*`**: Isolated feature branches.
 
-Tests cover repositories, services, controllers, security, DTO validation, and integration scenarios.
-
-- **CI Integration**: Automated test execution is set up via GitHub Actions.
-    - Runs on every push or pull request to `docker` and `main` branches.
-    - Ensures that all tests pass before code merges.
-    - Automatically uploads test results (JUnit XML) and HTML reports, including JaCoCo coverage, as downloadable artifacts for inspection.
-- **Coverage**: Enabled via JaCoCo in Gradle.
-    - HTML report generated at `build/jacocoHtml` (artifact downloadable from CI run).
-    - Provides a clear overview of code coverage for all classes and methods.
-
-### JaCoCo & Gradle report (26/10/2025):
-
-![jacoco_test_report.png](misc/jacoco_test_report.png)
-![gradle_test_report.png](misc/gradle_test_report.png)
-
+---
 
 ## Project Structure
-
-```
-skydivinglogbook-spring-rest/
-├── frontend-app/                  # Standalone frontend application
-│   ├── css/                       # Stylesheets
-│   ├── js/                        # JavaScript files (e.g., main.js, login.js, dashboard.js)
-│   ├── index.html                 # Login page
-│   ├── register.html              # Registration page
-│   ├── dashboard.html             # Dashboard with jumps table and Info data
-│   └── jumps.html                 # Jump Creation form
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/nikospavlopoulos/skydivingrest/
-│   │   │       ├── config/                # Configuration classes (e.g., SecurityConfig, JacksonConfig, TimeConfig)
-│   │   │       ├── core/
-│   │   │       │   ├── enums/             # Enums (e.g., Role)
-│   │   │       │   └── exceptions/        # Custom exceptions (e.g., GenericException, UnauthorizedException)
-│   │   │       ├── dto/                   # Data Transfer Objects (e.g., UserInsertDTO, JumpInsertDTO)
-│   │   │       │   └── lookup/            # Lookup DTOs (e.g., JumpLookupDTO, AircraftLookupDTO)
-│   │   │       ├── mapper/                # MapStruct mappers for entity-DTO conversions
-│   │   │       ├── model/                 # JPA entities (e.g., User, Jump, Aircraft, Dropzone, Jumptype)
-│   │   │       ├── rest/                  # REST controllers (e.g., UserController, JumpController, LookupController)
-│   │   │       │   ├── error/             # Error handling (e.g., ErrorHandler, ApiErrorResponseDTO)
-│   │   │       │   └── logging/           # Request/response logging interceptor
-│   │   │       ├── security/              # Security components (e.g., CustomUserDetails, JwtAuthenticationFilter)
-│   │   │       │   └── jwt/               # JWT service (e.g., JwtServiceImpl)
-│   │   │       ├── service/               # Business logic (e.g., UserServiceImpl, JumpServiceImpl, StaticDataServiceImpl)
-│   │   │       └── specification/         # JPA specifications for search queries
-│   │   └── resources/
-│   │       ├── application.properties     # Configuration properties (dev/test profiles)
-│   │       └── sql/                       # Database initialization scripts (H2 / MySQL)
-│   └── test/
-│       └── java/                          # Tests (repositories, services, controllers, security)
-├── LICENSE                                # MIT License
-└── README.md                              # This file
-```
-
+Standard Spring Boot style structure with a standalone `frontend-app` directory and `sql` initialization scripts.
 
 ## License
-
 MIT License. See the [LICENSE](LICENSE) file for details.
