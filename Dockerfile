@@ -1,17 +1,23 @@
 # Stage 1: Build Stage
-
 FROM gradle:8.14.3-jdk21-corretto AS builder
-WORKDIR /
+WORKDIR /app
 COPY . .
-RUN gradle clean bootJar
+# Skip tests during Docker build as they are covered by CI/CD pipeline
+RUN ./gradlew clean bootJar -x test
 
-#Stage 2: Runtime
+# Stage 2: Runtime Stage
 FROM eclipse-temurin:21-jre-alpine
-WORKDIR /
-ENV SPRING_PROFILES_ACTIVE=demo
-COPY --from=builder /build/libs/app.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+WORKDIR /app
 
-# Commands notes
-# docker build -t skydivinglogbook .
-# docker run --rm -p8080:8080 --name=sdlog skydivinglogbook:latest
+# Security: Create and use a non-privileged system user
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+COPY --from=builder /app/build/libs/app.jar app.jar
+
+# ENTRYPOINT allows the container to receive environment variables at runtime
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Usage Notes:
+# Build:  docker build -t skydivinglogbook .
+# Run in Demo mode:  docker run -e SPRING_PROFILES_ACTIVE=demo --rm -p 8080:8080 --env-file .env --name=sdlog skydivinglogbook:latest
