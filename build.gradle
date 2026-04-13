@@ -125,9 +125,6 @@ dependencies {
     // Include Actuator Health Endpoints
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // Include the ability to read the dotenv file
-    // Source: https://mvnrepository.com/artifact/me.paulschwarz/spring-dotenv
-    implementation("me.paulschwarz:spring-dotenv:5.0.1")
 }
 
 // ----------------------------------------
@@ -152,21 +149,6 @@ compileTestJava {
 
 tasks.named('test') {
     useJUnitPlatform()
-
-    // Load .env variables into the test environment
-    if (file(".env").exists()) {
-        file(".env").readLines().each { line ->
-            if (!line.trim().isEmpty() && !line.startsWith("#")) {
-                def parts = line.split("=", 2)
-                if (parts.length == 2) {
-                    def key = parts[0].trim()
-                    def value = parts[1].trim().replaceAll(/^"|"$/, "")
-                    environment key, value
-                }
-            }
-        }
-    }
-
     finalizedBy jacocoTestReport
 }
 
