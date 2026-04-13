@@ -1,6 +1,7 @@
 package com.nikospavlopoulos.skydivingrest.service;
 
 import com.nikospavlopoulos.skydivingrest.core.enums.Role;
+import com.nikospavlopoulos.skydivingrest.core.events.UserRegisteredEvent;
 import com.nikospavlopoulos.skydivingrest.core.exceptions.*;
 import com.nikospavlopoulos.skydivingrest.dto.PasswordUpdateDTO;
 import com.nikospavlopoulos.skydivingrest.dto.UserInsertDTO;
@@ -10,6 +11,7 @@ import com.nikospavlopoulos.skydivingrest.mapper.UserMapper;
 import com.nikospavlopoulos.skydivingrest.model.User;
 import com.nikospavlopoulos.skydivingrest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements IUserService{
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final PageableHandlerMethodArgumentResolverCustomizer pageableCustomizer;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     /**
@@ -71,6 +74,7 @@ public class UserServiceImpl implements IUserService{
         // In case there is DataIntegrityViolation during DB persist
         try {
             User savedUser = userRepository.save(user);
+            eventPublisher.publishEvent(new UserRegisteredEvent(savedUser.getId()));
             return userMapper.userToUserLookupDTO(savedUser);
         } catch (DataIntegrityViolationException ex) {
             throw new ResourceConflictException("Data Integrity - There is a problem with accessing the database.", HttpStatus.CONFLICT);
