@@ -28,7 +28,7 @@ A **Kubernetes-ready**, event-driven RESTful API for tracking skydiving jumps, m
 4. [Features](#features)
 5. [Tech Stack](#tech-stack)
 6. [Database Schema](#database-schema)
-7. [Architecture — Class Diagrams](#architecture--class-diagrams)
+7. [Architecture: Class Diagrams](#architecture-class-diagrams)
 8. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
 9. [Roadmap & Future TODOs](#roadmap--future-todos)
 10. [Installation & Setup](#installation--setup)
@@ -87,7 +87,7 @@ The schema ensures data consistency across users, jumps, aircraft, dropzones, an
 
 ![database_schema.png](misc/database_schema.png)
 
-## Architecture — Class Diagrams
+## Architecture: Class Diagrams
 
 Below is a compact, high-level class diagram showing the main domain classes and their relationships.
 
